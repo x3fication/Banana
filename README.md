@@ -8,13 +8,13 @@ This is a free & better alternative to MCPTool
 
 # Features
 ## Commands
-[server] - Usage: server <address>
-[uuid] - Usage: uuid <ign>
-[clear] - Clears the screen
-[update] - Re-Initializes banana
-[rcon] - Usage: rcon <server> <password>
-[brutrcon] - Usage: brutrcon <server> <file>
-[fuzz] - Usage: fuzz <website> <file>
+- [server] - Usage: server <address>
+- [uuid] - Usage: uuid <ign>
+- [clear] - Clears the screen
+- [update] - Re-Initializes banana
+- [rcon] - Usage: rcon <server> <password>
+- [brutrcon] - Usage: brutrcon <server> <file>
+- [fuzz] - Usage: fuzz <website> <file>
 
 MORE SOON!
 
