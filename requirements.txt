@@ -2,3 +2,4 @@ mcstatus
 requests
 colorama
 fake-useragent
+mcrcon
