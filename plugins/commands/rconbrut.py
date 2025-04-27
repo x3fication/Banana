@@ -2,6 +2,7 @@ from mcrcon import MCRcon
 from plugins.common import *
 
 def rconbrut(server, file):
+    if checkserver(server) == False: error('Please input a real domain or server'); return
     try:
         with open(file, 'r') as f:
             passwords = [line.strip() for line in f if line.strip()]

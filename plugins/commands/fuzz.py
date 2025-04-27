@@ -14,6 +14,7 @@ def fuzzit(url):
 
 def fuzz(domain, file, mthreads):
     try:
+         if checkserver(domain) == False: error('Please input a real domain'); return
          mthreads = int(mthreads)
          domain = str(domain).replace('https://', '').replace('http://', '')
          with open(file, 'r') as f:

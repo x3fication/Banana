@@ -8,12 +8,16 @@ from plugins.commands.rconbrut import rconbrut
 from plugins.commands.fuzz import fuzz
 from plugins.commands.ipinfo import ipinfo
 from plugins.commands.dns import lookup
+from plugins.commands.checker import check
+from plugins.commands.scan import scan
 
 commands = {
     'server': (server, 1, "Usage: server <address>\nShows information about the server"),
     'uuid': (puuid, 1, "Usage: uuid <ign>\nShows player's uuid"),
     'ipinfo': (ipinfo, 1, "Usage: ipinfo <ip>\nShows information about given IP"),
     'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
+    'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
+    'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
     'clear': (clear, 0, "Clears the screen"),
     'update': (upd, 0, "Re-Initializes banana"),
     'rcon': (rcon, 2, "Usage: rcon <server> <password>\nConnects to a server's rcon"),

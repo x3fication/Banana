@@ -19,6 +19,6 @@ def lookup(domain):
                 return
             
             except Exception as e:
-                print(e)
+                error(e)
 
     else: error('Please enter a valid domain')
