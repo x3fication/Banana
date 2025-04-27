@@ -10,11 +10,17 @@ This is a free & better alternative to MCPTool
 ## Commands
 - [server] - Usage: server <address>
 - [uuid] - Usage: uuid <ign>
+- [ipinfo] - Usage: ipinfo <ip>
+- [monitor] - Usage: monitor <ip>
+- [dns] - Usage: dns <domain>
+- [proxy] - Usage: proxy <ip> <mode>
+- [check] - Usage: check <file>
+- [scan] - Usage: scan <ip> <range> <threads>
 - [clear] - Clears the screen
 - [update] - Re-Initializes banana
 - [rcon] - Usage: rcon <server> <password>
 - [brutrcon] - Usage: brutrcon <server> <file>
-- [fuzz] - Usage: fuzz <website> <file>
+- [fuzz] - Usage: fuzz <website> <file> <threads>
 
 MORE SOON!
 
