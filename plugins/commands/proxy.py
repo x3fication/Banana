@@ -1,10 +1,14 @@
 import subprocess, os, random
 from plugins.common import *
+import string
 
 def proxy(ip, mode):
     try:
-        if not checkserver(ip): error('Please input a real domain or server'); return
         p = "proxy/velocity"
+        secret = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(43))
+        with open(f"{p}/forwarding.secret", "w", encoding="utf-8") as f:
+            f.write(secret)
+        if not checkserver(ip): error('Please input a real domain or server'); return
         port = random.randint(20000, 30000)
         if not os.path.exists(p): os.makedirs(p)
 
