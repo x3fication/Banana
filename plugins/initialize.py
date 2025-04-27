@@ -2,6 +2,7 @@ from plugins.common import *
 from os import getlogin
 import shutil
 import requests
+import subprocess
 
 def pkgmngr():
     if shutil.which('apt'):
@@ -13,12 +14,10 @@ def pkgmngr():
     else: return None
 
 def node():
-    info('Downloading nodeJS')
+    print('Downloading nodeJS')
 
     if os.name == 'nt':
-        print('Please download Node.js from https://nodejs.org/en')
-        print('Windows Auto-Install Soon')
-        time.sleep(3)
+        os.system(r'winget install OpenJS.NodeJS')
 
 
     elif os.name == 'posix':
