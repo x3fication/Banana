@@ -11,6 +11,7 @@ from plugins.commands.dns import lookup
 from plugins.commands.checker import check
 from plugins.commands.scan import scan
 from plugins.commands.monitor import monitor
+from plugins.commands.proxy import proxy
 
 commands = {
     'server': (server, 1, "Usage: server <address>\nShows information about the server"),
@@ -18,6 +19,7 @@ commands = {
     'ipinfo': (ipinfo, 1, "Usage: ipinfo <ip>\nShows information about given IP"),
     'monitor': (monitor, 1, "Usage: monitor <ip>\nMonitors who leaves and joins on a specified server (if queries are enabled)"),
     'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
+    'proxy': (proxy, 2, "Usage: proxy <ip> <mode>\nStarts a local Velocity proxy server that redirects to the specified server."),
     'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
     'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
     'clear': (clear, 0, "Clears the screen"),

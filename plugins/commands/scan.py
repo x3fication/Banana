@@ -9,8 +9,9 @@ def chico(server):
         success(f"{yellow}({white}{server}{yellow})({white}{status.players.online}/{status.players.max}{yellow})({white}{round(status.latency)}ms{yellow})({white}{status.version.name}{yellow})({white}{status.version.protocol}{yellow})")
     except TimeoutError: pass
     except Exception: pass
-      
+
 def scan(server, ports, mthreads):
+    ohio = 0
     if checkserver(server) == False: error('Please input a real domain or server'); return
     ports = ports.split('-')
     start = int(ports[0])
