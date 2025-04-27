@@ -7,8 +7,8 @@ def chico(server):
         lookup = JavaServer.lookup(server)
         status = lookup.status()
         success(f"{yellow}({white}{server}{yellow})({white}{status.players.online}/{status.players.max}{yellow})({white}{round(status.latency)}ms{yellow})({white}{status.version.name}{yellow})({white}{status.version.protocol}{yellow})")
-    except TimeoutError: error(server)
-    except Exception: error(server)
+    except TimeoutError: pass
+    except Exception: pass
       
 def scan(server, ports, mthreads):
     if checkserver(server) == False: error('Please input a real domain or server'); return
