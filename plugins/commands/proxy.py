@@ -85,7 +85,7 @@ show-plugins = false
             error(f"Could not find velocity.jar in {p}")
             return
 
-        subprocess.run(["java", "-jar", "velocity.jar"], cwd=p)
         info(f'Proxy started on 0.0.0.0:{port}')
+        subprocess.run(["java", "-jar", "velocity.jar"], cwd=p)
 
     except KeyboardInterrupt: pass
