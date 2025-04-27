@@ -7,6 +7,7 @@
 This is a free & better alternative to MCPTool
 
 # Installation
+Requirements Python 3.10+
 ```
 Open Terminal and run: 
 git clone https://github.com/Renovsk/Banana.git && cd Banana
