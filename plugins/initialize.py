@@ -3,7 +3,6 @@ from os import getlogin
 import shutil
 import requests
 
-
 def pkgmngr():
     if shutil.which('apt'):
         return 1
@@ -15,11 +14,12 @@ def pkgmngr():
 
 def node():
     info('Downloading nodeJS')
+
     if os.name == 'nt':
-      os.system('winget install Schniz.fnm')
-      os.system('fnm install 23')
-      os.system('node -v')
-      os.system('npm -v')
+        print('Please download Node.js from https://nodejs.org/en')
+        print('Windows Auto-Install Soon')
+        time.sleep(3)
+
 
     elif os.name == 'posix':
         pm = pkgmngr()
@@ -87,5 +87,5 @@ V  \
         animate()
         loadmenu()
 
-    elif firstload() == False: loadmenu()
+    elif firstload() == False: animate(); loadmenu()
     
