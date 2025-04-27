@@ -7,11 +7,13 @@ from plugins.commands.rcon import rcon
 from plugins.commands.rconbrut import rconbrut
 from plugins.commands.fuzz import fuzz
 from plugins.commands.ipinfo import ipinfo
+from plugins.commands.dns import lookup
 
 commands = {
     'server': (server, 1, "Usage: server <address>\nShows information about the server"),
     'uuid': (puuid, 1, "Usage: uuid <ign>\nShows player's uuid"),
     'ipinfo': (ipinfo, 1, "Usage: ipinfo <ip>\nShows information about given IP"),
+    'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
     'clear': (clear, 0, "Clears the screen"),
     'update': (upd, 0, "Re-Initializes banana"),
     'rcon': (rcon, 2, "Usage: rcon <server> <password>\nConnects to a server's rcon"),
@@ -29,22 +31,25 @@ def chelp(command=None):
     else: print(f'Unknown Command')
 
 def execmd(cmd):
-    part = cmd.split()
-    if len(part) == 0:
-        return
-    
-    command = part[0]
-    args = part[1:]
+    try:
+        part = cmd.split()
+        if len(part) == 0:
+            return
 
-    if command == "help":
-        if len(args) == 0: chelp()
-        elif len(args) == 1: chelp(args[0])
-    elif command in commands:
-        func, required_args, msg = commands[command]
-        if len(args) == required_args:
-            func(*args)
-        else: print(msg)
-    else: print('Unknown Command')
+        command = part[0]
+        args = part[1:]
+
+        if command == "help":
+            if len(args) == 0: chelp()
+            elif len(args) == 1: chelp(args[0])
+        elif command in commands:
+            func, required_args, msg = commands[command]
+            if len(args) == required_args:
+                func(*args)
+            else: print(msg)
+        else: print('Unknown Command')
+
+    except Exception as e: error(e)
 
 if __name__ == '__main__':
     initialize()
