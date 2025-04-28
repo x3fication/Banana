@@ -19,6 +19,7 @@ def sendcmd(username, server, file):
         for command in commands:
             if requests.post('http://localhost:6969/send', json={"message": command}).status_code != 200:
                 error(f'Failed to send message. (BOT LIKELY NOT CONNECTED)')
+            success(f'Sent {command}')
             time.sleep(0.5)
 
         success(f'All commands have been sent')
