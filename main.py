@@ -66,7 +66,6 @@ def loadscripts(folder='scripts'):
                 "module": module,
                 "arguments": getattr(module, 'arguments', []),
                 "usage": getattr(module, 'usage', ''),
-                "description": getattr(module, 'description', '')
             }
 
 def api():
