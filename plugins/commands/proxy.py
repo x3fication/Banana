@@ -36,6 +36,6 @@ def proxy(ip, mode):
         with open(f"{p}/velocity.toml", "w", encoding="utf-8") as f:
             toml.dump(config, f)
         if not os.path.exists(f"{p}/plugins"): os.makedirs(f"{p}/plugins")
-        os.system("java", "-jar", "velocity.jar")
+        os.system("java -jar velocity.jar")
     except Exception as e:
         error(f"Proxy error: {e}")
