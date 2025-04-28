@@ -22,7 +22,7 @@ motd = "<#09add3>A Velocity Server"
 
 show-max-players = 500
 
-online-mode = true
+online-mode = false
 
 force-key-authentication = true
 
