@@ -10,5 +10,4 @@ def ipinfo(ip):
             if key != "readme":
                 print(f"{yellow}[{white}{key}{yellow}]{white} {value}")
 
-        else: error("No data found for the given IP.")
     except Exception as e: error(f"Error: {e}")

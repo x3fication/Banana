@@ -44,7 +44,7 @@ def chelp(command=None):
     if command is None:
         print(f"{yellow}[{white}Available Commands{yellow}]")
         for cmd, (func, args, msg) in commands.items(): print(f"{yellow}[{white}{cmd}{yellow}] {white}- {msg.splitlines()[0]}")
-        for name, script in scripts.items(): print(f"{yellow}[{white}{name}{yellow}] {white}- {script['description']}")
+        for name, script in scripts.items(): print(f"{yellow}[{white}{name}{yellow}] {white}- {script['usage']}")
     elif command in commands:
         _, _, msg = commands[command]
         print(msg)
