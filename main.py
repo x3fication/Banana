@@ -69,10 +69,9 @@ def loadscripts(folder='scripts'):
             }
 
 def api():
-    api = os.path.join(os.getcwd(), "api", "server.js")
-
+    gg = os.path.join(os.getcwd(), "api", "server.js")
     subprocess.Popen(
-        ["node", api],
+        ["node", gg],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         stdin=subprocess.DEVNULL,
@@ -107,9 +106,11 @@ def execmd(cmd):
     except Exception as e: error(e)
 
 if __name__ == '__main__':
+    
     initialize() 
     loadscripts()
-    api() # start the bot api
+    api()
+     # start the bot api
     while True:
         cmd = input(f'{white}{os.getlogin()}@{yellow}banana:~{white}$ ')
         execmd(cmd)
