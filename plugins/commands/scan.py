@@ -11,7 +11,6 @@ def chico(server):
     except Exception: pass
 
 def scan(server, ports, mthreads):
-    ohio = 0
     if checkserver(server) == False: error('Please input a real domain or server'); return
     ports = ports.split('-')
     start = int(ports[0])

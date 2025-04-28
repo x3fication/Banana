@@ -7,7 +7,7 @@ def sendcmd(username, server, file):
         response = requests.post('http://localhost:6969/connect', json={
             "host": server, "port": 25565, "username": username
         })
-        if response.status_code != 200:
+        if response.status_code != 200 and response.status_code != 400:
             return error(f'Failed to connect [{response.status_code}]')
 
         while not requests.get('http://localhost:6969/status').json().get('connected'):
