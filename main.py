@@ -1,3 +1,4 @@
+import importlib.util
 from plugins.initialize import *
 from plugins.common import *
 from plugins.logging import *
@@ -15,7 +16,9 @@ from plugins.commands.proxy import proxy
 from plugins.commands.connect import connect
 from plugins.commands.kick import kick
 from plugins.commands.sendcmd import sendcmd
+from plugins.commands.shell import shell
 
+scripts = {}
 
 commands = {
     'server': (server, 1, "Usage: server <address>\nShows information about the server"),
@@ -29,6 +32,7 @@ commands = {
     'clear': (clear, 0, "Clears the screen"),
     'update': (upd, 0, "Re-Initializes banana"),
     'kick': (kick, 2, "Usage: kick <username> <server>\nKicks a player from the server (if cracked)"),
+    'shell': (shell, 1, "Usage: shell <port>\nUses netcat to listen to a port"),
     'connect': (connect, 2, "Usage: connect <username> <server>\nJoins with a bot and allows you to send messages"),
     'rcon': (rcon, 2, "Usage: rcon <server> <password>\nConnects to a server's rcon"),
     'brutrcon': (rconbrut, 2, "Usage: brutrcon <server> <file>\nTries the passwords of the file given to try to connect to rcon"),
@@ -40,10 +44,30 @@ def chelp(command=None):
     if command is None:
         print(f"{yellow}[{white}Available Commands{yellow}]")
         for cmd, (func, args, msg) in commands.items(): print(f"{yellow}[{white}{cmd}{yellow}] {white}- {msg.splitlines()[0]}")
+        for name, script in scripts.items(): print(f"{yellow}[{white}{name}{yellow}] {white}- {script['description']}")
     elif command in commands:
         _, _, msg = commands[command]
         print(msg)
+    elif command in scripts:
+        print(scripts[command]['usage'])
     else: print(f'Unknown Command')
+
+
+def loadscripts(folder='scripts'):
+    if not os.path.exists(folder): return
+    for filename in os.listdir(folder):
+        if filename.endswith('.py'):
+            path = os.path.join(folder, filename)
+            spec = importlib.util.spec_from_file_location(filename[:-3], path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            name = filename[:-3]
+            scripts[name] = {
+                "module": module,
+                "arguments": getattr(module, 'arguments', []),
+                "usage": getattr(module, 'usage', ''),
+                "description": getattr(module, 'description', '')
+            }
 
 def api():
     api = os.path.abspath("./api/server.js")
@@ -73,12 +97,19 @@ def execmd(cmd):
             if len(args) == required_args:
                 func(*args)
             else: print(msg)
+        elif command in scripts:
+            script = scripts[command]
+            if len(args) == len(script["arguments"]):
+                script["module"].run(dict(zip(script["arguments"], args)))
+            else:
+                print(script["usage"])
         else: print('Unknown Command')
 
     except Exception as e: error(e)
 
 if __name__ == '__main__':
     initialize() 
+    loadscripts()
     api() # start the bot api
     while True:
         cmd = input(f'{white}{os.getlogin()}@{yellow}banana:~{white}$ ')

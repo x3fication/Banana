@@ -4,3 +4,4 @@ colorama
 fake-useragent
 mcrcon
 dnspython
+toml
