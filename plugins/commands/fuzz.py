@@ -25,7 +25,7 @@ def fuzz(domain, file, mthreads):
              url = domain.replace('FUZZ', sbsd)
              while threading.active_count() > mthreads:
                  pass
-             t = threading.Thread(target=fuzzit, args=(url,))
+             t = threading.Thread(target=fuzzit, args=(url,), daemon=True)
              t.start()
              threads.append(t)
 

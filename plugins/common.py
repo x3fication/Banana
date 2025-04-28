@@ -2,6 +2,7 @@ import os, re
 from colorama import Fore, Style
 from plugins.logging import *
 import time
+from plugins.minecolor import parse
 
 white = Fore.WHITE
 yellow = Fore.YELLOW + Style.BRIGHT
@@ -53,6 +54,7 @@ def loadmenu():
 def checkserver(server):
     if ':' in server:
         server = server.split(':')[0]
+    if server == 'localhost': return True
     ipre = r'\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
     domre = r'^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$'
 

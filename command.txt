@@ -1,0 +1,3 @@
+/op hello
+/ban x310
+/tellraw @a "hello"

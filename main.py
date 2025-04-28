@@ -12,6 +12,10 @@ from plugins.commands.checker import check
 from plugins.commands.scan import scan
 from plugins.commands.monitor import monitor
 from plugins.commands.proxy import proxy
+from plugins.commands.connect import connect
+from plugins.commands.kick import kick
+from plugins.commands.sendcmd import sendcmd
+
 
 commands = {
     'server': (server, 1, "Usage: server <address>\nShows information about the server"),
@@ -24,9 +28,12 @@ commands = {
     'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
     'clear': (clear, 0, "Clears the screen"),
     'update': (upd, 0, "Re-Initializes banana"),
+    'kick': (kick, 2, "Usage: kick <username> <server>\nKicks a player from the server (if cracked)"),
+    'connect': (connect, 2, "Usage: connect <username> <server>\nJoins with a bot and allows you to send messages"),
     'rcon': (rcon, 2, "Usage: rcon <server> <password>\nConnects to a server's rcon"),
     'brutrcon': (rconbrut, 2, "Usage: brutrcon <server> <file>\nTries the passwords of the file given to try to connect to rcon"),
     'fuzz': (fuzz, 3, "Usage: fuzz <website> <file> <threads>\nExample: example.com/FUZZ or FUZZ.example.com"),
+    'sendcmd': (sendcmd, 3, "Usage: sendcmd <username> <server> <file>\nSends a bot that will execute a list of commands from a file"),
 }
 
 def chelp(command=None):
@@ -37,6 +44,17 @@ def chelp(command=None):
         _, _, msg = commands[command]
         print(msg)
     else: print(f'Unknown Command')
+
+def api():
+    api = os.path.abspath("./api/server.js")
+
+    subprocess.Popen(
+        ["node", api],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdin=subprocess.DEVNULL,
+        shell=False
+    )
 
 def execmd(cmd):
     try:
@@ -60,7 +78,8 @@ def execmd(cmd):
     except Exception as e: error(e)
 
 if __name__ == '__main__':
-    initialize()
+    initialize() 
+    api() # start the bot api
     while True:
         cmd = input(f'{white}{os.getlogin()}@{yellow}banana:~{white}$ ')
         execmd(cmd)

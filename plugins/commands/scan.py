@@ -23,7 +23,7 @@ def scan(server, ports, mthreads):
         while threading.active_count() > int(mthreads):
             pass
         serverz = f'{server}:{port}'
-        t = threading.Thread(target=chico, args=(serverz,))
+        t = threading.Thread(target=chico, args=(serverz,), daemon=True)
         t.start()
         threads.append(t)
     

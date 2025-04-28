@@ -18,6 +18,8 @@ def node():
 
     if os.name == 'nt':
         os.system(r'winget install OpenJS.NodeJS')
+        time.sleep(2)
+        os.system('npm install mineflayer express')
 
 
     elif os.name == 'posix':
@@ -27,17 +29,20 @@ def node():
             os.system('sudo apt install nodejs npm')
             os.system('node -v')
             os.system('npm -v')
+            os.system('npm install mineflayer express')
 
         if pm == 2:
             os.system('sudo dnf update')
             os.system('sudo dnf install nodejs npm')
             os.system('node -v')
             os.system('npm -v')
+            os.system('npm install mineflayer express')
 
         if pm == 3:
             os.system('sudo pacman -S nodejs npm')
             os.system('node -v')
             os.system('npm -v')
+            os.system('npm install mineflayer express')
 
 def velocity():
     info('Downloading Velocity [PaperMC]')

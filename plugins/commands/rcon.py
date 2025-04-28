@@ -5,7 +5,7 @@ def rcon(server, password):
     if checkserver(server) == False: error('Please input a real domain or server'); return
     try:
         with MCRcon(server, password) as mcr:
-            print(f'{yellow}[ ! ] Type "exit" to exit the rcon client')
+            info(f'Type "exit" to exit the rcon client')
             while True:
                rcmd = input(f'{yellow}/')
                if rcmd == 'exit': mcr.disconnect(); return False
