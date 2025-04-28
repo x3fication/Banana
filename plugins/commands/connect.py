@@ -11,7 +11,7 @@ def connect(username, server):
             return error(f'Failed to connect [{response.status_code}]')
 
         while not requests.get('http://localhost:6969/status').json().get('connected'):
-            info('Retrying Connection..,.')
+            info('Waiting for connection...')
             time.sleep(1)
             pass
         

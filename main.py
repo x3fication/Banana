@@ -69,7 +69,7 @@ def loadscripts(folder='scripts'):
             }
 
 def api():
-    api = os.path.abspath("./api/server.js")
+    api = os.path.join(os.getcwd(), "api", "server.js")
 
     subprocess.Popen(
         ["node", api],
