@@ -12,6 +12,7 @@ def connect(username, server):
 
         while not requests.get('http://localhost:6969/status').json().get('connected'):
             print('Retrying Connection..,.')
+            time.sleep(1)
             pass
         
         info(f'Type "exit" to exit. [beta] this is still very shit but it works for sending messages')
