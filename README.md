@@ -10,6 +10,8 @@ This is a free & better alternative to MCPTool
 ## Requirements 
 - Python 3.10+
 - winget package manager (Windows)
+
+## Get a local copy up and running
 ```
 Open Terminal and run: 
 git clone https://github.com/Renovsk/Banana.git && cd Banana
