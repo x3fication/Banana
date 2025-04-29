@@ -1,40 +1,74 @@
-import express from 'express'
-import { createBot } from 'mineflayer'
+import express from 'express';
+import { createBot } from 'mineflayer';
 
-const app = express()
-const port = 6969
-let bot = null, latestMessage = null, botStatus = { connected: false, username: null }
+const app = express();
+const port = 6969;
 
-app.use(express.json())
+const botz = {}, statuz = {};
 
-app.post('/connect', ({ body: { host, port, username } }, res) => {
-  if (bot) return res.status(400).json({ error: 'Bot already connected.' })
-  if (host.includes(':')) [host, port] = host.split(':')
-  bot = createBot({ host, port: port || 25565, username })
+app.use(express.json());
+
+app.post('/connect', (req, res) => {
+  const { host, port = 25565, username } = req.body;
+  const server = `${host}:${port}`;
   
-  bot.on('login', () => { console.log(`[Bot] Logged in as ${username}`); botStatus = { connected: true, username } })
-  bot.on('end', () => { console.log('[Bot] Disconnected.'); botStatus = { connected: false, username: null }; bot = null })
-  bot.on('spawn', () => { console.log('[Bot] Spawned in server.'); botStatus.connected = true })
-  bot.on('messagestr', (message) => latestMessage = message)
+  if (botz[server]?.[username]) return res.status(400).json({ error: 'Bot already connected.' });
 
-  res.json({ message: `Bot ${username} connected to ${host}:${port || 25565}` })
-})
+  let bot;
+  try {
+    bot = createBot({ host, port, username });
+  } catch (err) {
+    return res.status(500).json({ error: `Failed to create bot: ${err.message}` });
+  }
 
-app.post('/send', ({ body: { message } }, res) => {
-  if (!bot) return res.status(400).json({ error: 'No bot connected.' })
-  bot.chat(message)
-  res.json({ message: `Sent: ${message}` })
-})
+  botz[server] = botz[server] || {};
+  statuz[server] = statuz[server] || {};
+  botz[server][username] = bot;
+  statuz[server][username] = { connected: false, username };
+
+  bot.on('login', () => console.log(`[Bot] Logged in as ${username} on ${server}`));
+  bot.on('spawn', () => {
+    console.log(`[Bot] Spawned on ${server}`);
+    statuz[server][username].connected = true;
+  });
+  bot.on('end', () => {
+    console.log(`[Bot] Disconnected from ${server}`);
+    delete botz[server][username];
+    delete statuz[server][username];
+    if (!Object.keys(botz[server]).length) delete botz[server];
+    if (!Object.keys(statuz[server]).length) delete statuz[server];
+  });
+  bot.on('error', err => console.log(`[Bot] ${username} @ ${server}: ${err.message}`));
+
+  res.json({ message: 'Bot is connecting...', server, username, status: 'connecting' });
+});
+
+app.post('/send', (req, res) => {
+  const { host, port = 25565, username, message } = req.body;
+  const server = `${host}:${port}`;
+  const bot = botz[server]?.[username];
+  if (!bot) return res.status(400).json({ error: 'No bot with this username connected.' });
+  
+  bot.chat(message);
+  res.json({ message: `Sent to ${server} by ${username}: ${message}` });
+});
 
 app.post('/disconnect', (req, res) => {
-  if (!bot) return res.status(400).json({ error: 'No bot connected.' })
-  bot.quit()
-  bot = null
-  botStatus = { connected: false, username: null }
-  res.json({ message: 'Bot disconnected.' })
-})
+  const { host, port = 25565, username } = req.body;
+  const server = `${host}:${port}`;
+  const bot = botz[server]?.[username];
+  const status = statuz[server]?.[username];
 
-app.get('/status', (req, res) => res.json(botStatus))
-app.get('/latest', (req, res) => latestMessage ? res.json({ latestMessage }) : res.status(400).json({ error: 'No messages received yet.' }))
+  if (!bot || !status) return res.status(400).json({ error: 'No bot connected.' });
 
+  bot.quit();
+  delete botz[server][username];
+  delete statuz[server][username];
+  if (!Object.keys(botz[server]).length) delete botz[server];
+  if (!Object.keys(statuz[server]).length) delete statuz[server];
+
+  res.json({ message: `Bot ${username} disconnected from ${server}` });
+});
+
+app.get('/status', (req, res) => res.json(Object.keys(statuz).length ? statuz : { connected: false }));
 app.listen(port, () => console.log(`API listening on http://localhost:${port}`))

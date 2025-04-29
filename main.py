@@ -17,6 +17,7 @@ from plugins.commands.connect import connect
 from plugins.commands.kick import kick
 from plugins.commands.sendcmd import sendcmd
 from plugins.commands.shell import shell
+from plugins.commands.ogmur import ogmur
 
 scripts = {}
 
@@ -30,6 +31,7 @@ commands = {
     'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
     'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
     'clear': (clear, 0, "Clears the screen"),
+    'ogmur': (ogmur, 3, "Usage: ogmur <users_file> <server> <commands_file>\nSends a bot that will execute a list of commands from a file"),
     'update': (upd, 0, "Re-Initializes banana"),
     'kick': (kick, 2, "Usage: kick <username> <server>\nKicks a player from the server (if cracked)"),
     'shell': (shell, 1, "Usage: shell <port>\nUses netcat to listen to a port"),
@@ -37,7 +39,7 @@ commands = {
     'rcon': (rcon, 2, "Usage: rcon <server> <password>\nConnects to a server's rcon"),
     'brutrcon': (rconbrut, 2, "Usage: brutrcon <server> <file>\nTries the passwords of the file given to try to connect to rcon"),
     'fuzz': (fuzz, 3, "Usage: fuzz <website> <file> <threads>\nExample: example.com/FUZZ or FUZZ.example.com"),
-    'sendcmd': (sendcmd, 3, "Usage: sendcmd <username> <server> <file>\nSends a bot that will execute a list of commands from a file"),
+    'sendcmd': (sendcmd, 3, "Usage: sendcmd <username> <server> <commands_file>\nSends a bot that will execute a list of commands from a file"),
 }
 
 def chelp(command=None):
