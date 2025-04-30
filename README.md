@@ -4,7 +4,7 @@
 
 
 # Banana
-This is a free & better alternative to MCPTool
+This is a free and better alternative to MCPTool
 
 # Installation
 ## Requirements 
