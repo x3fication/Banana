@@ -24,7 +24,7 @@ def firstload():
 
 def animate():
     print("\033c", end="")
-    print(f"""
+    print(rf"""
 {yellow}      ___                          
      / _ )___ ____  ___ ____  ___ _
     / _  / _ `/ _ \/ _ `/ _ \/ _ `/
@@ -40,7 +40,7 @@ def animate():
 # Loads the menu or something
 def loadmenu():
     print("\033c", end="")
-    print(f'''
+    print(rf'''
 {yellow}      ___                          
      / _ )___ ____  ___ ____  ___ _
     / _  / _ `/ _ \/ _ `/ _ \/ _ `/
@@ -56,7 +56,7 @@ def checkserver(server):
         server = server.split(':')[0]
     if server == 'localhost': return True
     ipre = r'\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
-    domre = r'^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$'
+    domre = r'^(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})$'
 
     if re.match(domre, server) or re.match(ipre, server):
         return True

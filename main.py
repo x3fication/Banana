@@ -18,6 +18,7 @@ from plugins.commands.kick import kick
 from plugins.commands.sendcmd import sendcmd
 from plugins.commands.shell import shell
 from plugins.commands.ogmur import ogmur
+from plugins.commands.target import target
 
 scripts = {}
 
@@ -27,6 +28,7 @@ commands = {
     'ipinfo': (ipinfo, 1, "Usage: ipinfo <ip>\nShows information about given IP"),
     'monitor': (monitor, 1, "Usage: monitor <ip>\nMonitors who leaves and joins on a specified server (if queries are enabled)"),
     'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
+    'target': (target, 1, "Usage: target <domain>\nShows all subdomains w/ their resolved ips"),
     'proxy': (proxy, 2, "Usage: proxy <ip> <mode>\nStarts a local Velocity proxy server that redirects to the specified server."),
     'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
     'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
@@ -40,6 +42,7 @@ commands = {
     'brutrcon': (rconbrut, 2, "Usage: brutrcon <server> <file>\nTries the passwords of the file given to try to connect to rcon"),
     'fuzz': (fuzz, 3, "Usage: fuzz <website> <file> <threads>\nExample: example.com/FUZZ or FUZZ.example.com"),
     'sendcmd': (sendcmd, 3, "Usage: sendcmd <username> <server> <commands_file>\nSends a bot that will execute a list of commands from a file"),
+    'exit': (exit, 0, "exit this fuckass app")
 }
 
 def chelp(command=None):
@@ -92,27 +95,30 @@ def execmd(cmd):
         if command == "help":
             if len(args) == 0: chelp()
             elif len(args) == 1: chelp(args[0])
+
         elif command in commands:
             func, required_args, msg = commands[command]
             if len(args) == required_args:
                 func(*args)
             else: print(msg)
+
         elif command in scripts:
             script = scripts[command]
             if len(args) == len(script["arguments"]):
                 script["module"].run(dict(zip(script["arguments"], args)))
             else:
                 print(script["usage"])
+
         else: print('Unknown Command')
 
     except Exception as e: error(e)
 
-if __name__ == '__main__':
-    
+if __name__ == '__main__':  
     initialize() 
     loadscripts()
     api()
-     # start the bot api
     while True:
-        cmd = input(f'{white}{os.getlogin()}@{yellow}banana:~{white}$ ')
-        execmd(cmd)
+        try:
+            cmd = input(f'{white}{os.getlogin()}@{yellow}banana:~{white}$ ')
+            execmd(cmd)
+        except KeyboardInterrupt: pass
