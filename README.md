@@ -23,8 +23,6 @@ pip install -r requirements.txt
 python main.py
 ```
 
-> On first launch, install command line developer tools if prompted.
-
 ---
 
 ## ⚙️ Features
