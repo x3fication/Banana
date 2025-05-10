@@ -1,3 +1,11 @@
+process.on('uncaughtException', (err) => {
+  console.error('[ohio]', err);
+});
+
+process.on('unhandledRejection', (boxzzzzz) => {
+  console.error('[ohio]', boxzzzzz);
+});
+
 import express from 'express';
 import { createBot } from 'mineflayer';
 
@@ -51,6 +59,7 @@ app.post('/send', (req, res) => {
   
   bot.chat(message);
   res.json({ message: `Sent to ${server} by ${username}: ${message}` });
+  res.status(200).send('received')
 });
 
 app.post('/disconnect', (req, res) => {

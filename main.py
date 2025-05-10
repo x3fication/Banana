@@ -74,13 +74,13 @@ def loadscripts(folder='scripts'):
             }
 
 def api():
-    gg = os.path.join(os.getcwd(), "api", "server.js")
+    gg = os.path.join(os.getcwd(), "api")
     subprocess.Popen(
-        ["node", gg],
+        ["node", "server.js"],
+        cwd=os.path.join(gg),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        stdin=subprocess.DEVNULL,
-        shell=False
+        stdin=subprocess.DEVNULL
     )
 
 def execmd(cmd):
@@ -114,9 +114,10 @@ def execmd(cmd):
     except Exception as e: error(e)
 
 if __name__ == '__main__':  
+    api()
     initialize() 
     loadscripts()
-    api()
+
     while True:
         try:
             cmd = input(f'{white}{os.getlogin()}@{yellow}banana:~{white}$ ')

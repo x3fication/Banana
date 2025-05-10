@@ -5,15 +5,16 @@ import time
 def sendcmd(username, server, file):
     try:
         if checkserver(server) == False: error('Please input a real domain or server'); return
-        elif ':' in server: gzeht = str(server).split(':'); server = gzeht[0]; port = int(gzeht[1])
+        if ':' in server: gzeht = str(server).split(':'); server = gzeht[0]; port = int(gzeht[1])
+        else: port = 25565
         info('Connecting..')
         response = requests.post('http://localhost:6969/connect', json={
-            "host": server, "port": 25565 if not ':' in server else port, "username": username
+            "host": server, "port": port, "username": username
         })
         if response.status_code != 200 and response.status_code != 400:
             return error(f'Failed to connect [{response.status_code}]')
         success('Connected')
-        while not requests.get('http://localhost:6969/status').json()[server + ':' +'25565' if not ':' in server else port][username]:
+        while not requests.get('http://localhost:6969/status').json()[server + ':' + port][username]:
             info('Waiting for connection...')
             time.sleep(1)
         
@@ -21,7 +22,7 @@ def sendcmd(username, server, file):
             commands = [line.strip() for line in f if line.strip()] 
         
         for command in commands:
-            r = requests.post('http://localhost:6969/send', json={"host": server, "port": 25565 if not ':' in server else port, "username": username, "message": command})
+            r = requests.post('http://localhost:6969/send', json={"host": server, "port": port, "username": username, "message": command})
             if r.status_code != 200:
                 error(f'Failed to send message. (BOT LIKELY DISCONNECTED) {r.status_code}')
                 return
@@ -30,6 +31,6 @@ def sendcmd(username, server, file):
             time.sleep(0.5)
 
         success(f'All commands have been sent')
-        requests.post('http://localhost:6969/disconnect', json={"host": server, "port": 25565 if not ':' in server else port, "username": username})
+        requests.post('http://localhost:6969/disconnect', json={"host": server, "port": port, "username": username})
     except Exception as e:
         error(e)
