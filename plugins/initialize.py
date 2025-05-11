@@ -87,8 +87,7 @@ V  \
         ''')
         node()
         velocity()
-        animate()
-        loadmenu()
+        quit()
 
     elif firstload() == False: animate(); loadmenu()
     

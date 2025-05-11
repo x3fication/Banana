@@ -109,8 +109,9 @@ def execmd(cmd):
     except Exception as e: error(e)
 
 if __name__ == '__main__':  
+    
+    initialize()
     threading.Thread(target=api).start()
-    initialize() 
     loadscripts()
 
     while True:
