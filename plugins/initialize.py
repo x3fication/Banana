@@ -19,7 +19,7 @@ def node():
     if os.name == 'nt':
         subprocess.run(r'winget install OpenJS.NodeJS', shell=True)
         time.sleep(2)
-        info('Installing mineflayer, express')
+        logging.info('Installing mineflayer, express')
         subprocess.run('cmd /k npm install mineflayer express', shell=True)
 
 
@@ -46,13 +46,13 @@ def node():
             os.system('npm install mineflayer express')
 
 def velocity():
-    info('Downloading Velocity [PaperMC]')
+    logging.info('Downloading Velocity [PaperMC]')
     download = requests.get(f"https://mineacademy.org/api/velocity/latest")
     os.makedirs('./proxy/velocity/', exist_ok=True)
     with open('./proxy/velocity/velocity.jar', 'wb') as f:
         f.write(download.content)
-    success(f'Done downloading velocity.jar')
-    info('Setting up FakeProxy')
+    logging.success(f'Done downloading velocity.jar')
+    logging.info('Setting up FakeProxy')
     os.makedirs('./proxy/fakeproxy/', exist_ok=True)
     fp = requests.get(f"https://github.com/Renovsk/Plantain/releases/download/fp-1/plantain-fakeproxy-1.0.jar")
     with open('./proxy/fakeproxy/velocity.jar', 'wb') as f:
@@ -61,7 +61,7 @@ def velocity():
     os.makedirs('./proxy/fakeproxy/plugins/', exist_ok=True)
     with open('./proxy/fakeproxy/plugins/plantain-fakeproxy-1.0.jar', 'wb') as f:
         f.write(fp.content)
-    success('Done downloading plantain-fakeproxy-1.0.jar')
+    logging.success('Done downloading plantain-fakeproxy-1.0.jar')
     time.sleep(1)
 
 def upd(): # this is prob retarded way to do it ik

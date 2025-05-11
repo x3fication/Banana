@@ -8,13 +8,13 @@ def fuzzit(url):
         ua = UserAgent()
         r = requests.get(f"http://{url}", timeout=5, headers={"User-Agent": ua.random})
         if r.status_code == 200:
-            success(f"{yellow}[{white}FOUND{yellow}]{white} {url} (200 OK)")
+            logging.success(f"{yellow}[{white}FOUND{yellow}]{white} {url} (200 OK)")
     except requests.RequestException:
         pass
 
 def fuzz(domain, file, mthreads):
     try:
-         if checkserver(domain) == False: error('Please input a real domain'); return
+         if checkserver(domain) == False: logging.error('Please input a real domain'); return
          mthreads = int(mthreads)
          domain = str(domain).replace('https://', '').replace('http://', '')
          with open(file, 'r') as f:
@@ -32,4 +32,4 @@ def fuzz(domain, file, mthreads):
          for t in threads:
              t.join()
 
-    except Exception as e: error(e)
+    except Exception as e: logging.error(e)

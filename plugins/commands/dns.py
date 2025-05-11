@@ -15,10 +15,10 @@ def lookup(domain):
                 print(f"{yellow}[{white}{record}{yellow}]{white} No records found")
 
             except dns.resolver.NXDOMAIN:
-                error("Domain does not exist")
+                logging.error("Domain does not exist")
                 return
             
             except Exception as e:
-                error(e)
+                logging.error(e)
 
-    else: error('Please enter a valid domain')
+    else: logging.error('Please enter a valid domain')

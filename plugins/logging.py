@@ -7,14 +7,19 @@ green = Fore.GREEN + Style.BRIGHT
 
 from datetime import datetime
 
-def format(symbol, color, message):
-    print(f'{yellow}{white}{datetime.now().strftime('%H:%M')} {yellow}[ {color}{symbol} {yellow}] {message}')
+class logging:
+    @staticmethod
+    def format(symbol, color, message, end, flush=False):
+        print(f'{yellow}{white}{datetime.now().strftime("%H:%M")} {yellow}[ {color}{symbol} {yellow}] {message}', end=end, flush=flush)
 
-def error(message):
-    format('x', red, message)
+    @staticmethod
+    def error(message, end="\n", flush=False):
+        logging.format('x', red, message, end, flush)
 
-def info(message):
-    format('!', white, message)
+    @staticmethod
+    def info(message, end="\n", flush=False):
+        logging.format('!', white, message, end, flush)
 
-def success(message):
-    format('+', green, message)
+    @staticmethod
+    def success(message, end="\n", flush=False):
+        logging.format('+', green, message, end, flush)

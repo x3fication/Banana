@@ -106,7 +106,7 @@ def execmd(cmd):
 
         else: print('Unknown Command')
 
-    except Exception as e: error(e)
+    except Exception as e: logging.error(e)
 
 if __name__ == '__main__':
     initialize()

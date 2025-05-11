@@ -3,6 +3,7 @@ from colorama import Fore, Style
 from plugins.logging import *
 import time
 from plugins.minecolor import mcparse
+import requests
 
 white = '\033[38;2;255;255;255m'
 reset = '\033[0m'
@@ -57,6 +58,7 @@ def bananac():
 
     return config
 
+
 def animate():
     print("\033c", end="")
     print(rf"""
@@ -71,6 +73,27 @@ def animate():
         print("\r" + space + line * 2, end="", flush=True)
         time.sleep(0.03)
     
+def scrapeproxy(ptype):
+    if ptype.lower() not in ['socks5', 'socks4', 'http', 'https']: logging.error('Please enter a valid proxy type'); return
+    proxylist = {
+        'socks5': f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/socks5/data.txt",
+        'socks4': f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/socks4/data.txt",
+        'http'  : f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/http/data.txt",
+        'https' : f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/https/data.txt",
+    }
+    try:
+        response = requests.get(proxylist[ptype.lower()], timeout=5)
+        proxies = response.text.splitlines()
+        return proxies
+    
+    except Exception as e: logging.error(e); return
+    
+def checkproxy(proxy):
+    proxies = {'all': proxy,}
+    try:
+        if requests.get('https://google.com', proxies=proxies, timeout=5).status_code == 200: return True
+        return False
+    except: pass
 
 # Loads the menu or something
 

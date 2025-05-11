@@ -6,7 +6,7 @@ def server(server):
     try:
         if ':' in server: x310 = server.split(':'); host = x310[0]; port = x310[1]
         else: host = server
-        if checkserver(server) == False: error('Please input a real domain or server'); return
+        if checkserver(server) == False: logging.error('Please input a real domain or server'); return
         lookup = JavaServer.lookup(f'{host}:25565' if not ':' in server else f'{host}:{port}')
         status = lookup.status()
     
@@ -18,4 +18,4 @@ def server(server):
 {yellow}[{white}Ping{yellow}]{white} {round(status.latency)}ms""")
     
 
-    except TimeoutError: info('Server is offline')
+    except TimeoutError: logging.info('Server is offline')

@@ -6,17 +6,17 @@ def chico(server):
     try:
         lookup = JavaServer.lookup(server)
         status = lookup.status()
-        success(f"{yellow}({white}{server}{yellow})({white}{status.players.online}/{status.players.max}{yellow})({white}{round(status.latency)}ms{yellow})({white}{status.version.name}{yellow})({white}{status.version.protocol}{yellow})")
+        logging.success(f"{yellow}({white}{server}{yellow})({white}{status.players.online}/{status.players.max}{yellow})({white}{round(status.latency)}ms{yellow})({white}{status.version.name}{yellow})({white}{status.version.protocol}{yellow})")
     except TimeoutError: pass
     except Exception: pass
 
 def scan(server, ports, mthreads):
-    if checkserver(server) == False: error('Please input a real domain or server'); return
+    if checkserver(server) == False: logging.error('Please input a real domain or server'); return
     ports = ports.split('-')
     start = int(ports[0])
     end = int(ports[1])
-    if start < 1 or end > 65535: error('Please enter a valid range'); return
-    if start > end: error('Start port has to be <= end port'); return
+    if start < 1 or end > 65535: logging.error('Please enter a valid range'); return
+    if start > end: logging.error('Start port has to be <= end port'); return
     threads = []
     for port in range(start, end + 1):
         while threading.active_count() > int(mthreads):
