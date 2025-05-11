@@ -2,7 +2,7 @@ import os, re
 from colorama import Fore, Style
 from plugins.logging import *
 import time
-from plugins.minecolor import parse
+from plugins.minecolor import mcparse
 
 white = '\033[38;2;255;255;255m'
 reset = '\033[0m'
