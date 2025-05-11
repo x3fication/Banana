@@ -163,3 +163,5 @@ proxy/*
 passwords.txt
 logs/*
 lang/*
+package-lock.json
+package.json
