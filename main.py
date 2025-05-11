@@ -37,7 +37,7 @@ commands = {
     'ogmur': (ogmur, 3, "Usage: ogmur <users_file> <server> <commands_file>\nSends a bot that will execute a list of commands from a file"),
     'update': (upd, 0, "Re-Initializes banana"),
     'kick': (kick, 2, "Usage: kick <username> <server>\nKicks a player from the server (if cracked)"),
-    'shell': (shell, 1, "Usage: shell <port>\nUses netcat to listen to a port"),
+    'shell': (shell, 3, "Usage: shell <host> <port> <bind_port>\nUses netcat to listen to a port"),
     'connect': (connect, 2, "Usage: connect <username> <server>\nJoins with a bot and allows you to send messages"),
     'rcon': (rcon, 2, "Usage: rcon <server> <password>\nConnects to a server's rcon"),
     'brutrcon': (rconbrut, 2, "Usage: brutrcon <server> <file>\nTries the passwords of the file given to try to connect to rcon"),
