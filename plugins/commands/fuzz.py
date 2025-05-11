@@ -31,4 +31,5 @@ def fuzz(domain, file, mthreads):
 
          for t in threads:
              t.join()
+
     except Exception as e: error(e)

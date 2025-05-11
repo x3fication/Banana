@@ -1,3 +1,4 @@
+import threading
 import importlib.util
 from plugins.initialize import *
 from plugins.common import *
@@ -78,9 +79,9 @@ def api():
     subprocess.Popen(
         ["node", "server.js"],
         cwd=os.path.join(gg),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdin=subprocess.DEVNULL
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
     )
 
 def execmd(cmd):
@@ -114,7 +115,7 @@ def execmd(cmd):
     except Exception as e: error(e)
 
 if __name__ == '__main__':  
-    api()
+    threading.Thread(target=api).start()
     initialize() 
     loadscripts()
 

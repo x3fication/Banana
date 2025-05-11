@@ -19,8 +19,6 @@ def connect(username, server):
             info('Waiting for connection...')
             time.sleep(1)
         
-
-        
         info(f'Type "exit" to exit. [beta] this is still very shit but it works for sending messages')
         while True: 
             msg = input('> ').strip()
@@ -31,8 +29,8 @@ def connect(username, server):
                 else:
                     info(f'Bot already disconnected.')
                 return
-            if requests.post('http://localhost:6969/send', json={"host": server, "port": port, "username": username, "message": msg}).status_code == 400:
-                error(f'Failed to send message. (BOT is disconnected)')
+            r = requests.post('http://localhost:6969/send', json={"host": server, "port": port, "username": username, "message": msg})
+            if r.status_code != 200: error(f'Failed to send message. (BOT is disconnected) [{r.status_code}]')
 
     except KeyboardInterrupt: requests.post('http://localhost:6969/disconnect', json={"host": server, "port": port, "username": username}); return
     except Exception as e: 
