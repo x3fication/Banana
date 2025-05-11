@@ -36,7 +36,7 @@ commands = {
     'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
     'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
     'clear': (clear, 0, "clears the screen"),
-    'ogmur': (ogmur, 3, "Usage: ogmur <users_file> <server> <commands_file>\nSends a bot that will execute a list of commands from a file"),
+    'ogmur': (ogmur, 4, "Usage: ogmur <users_file> <server> <commands_file> <stay_logged>\nSends a bot that will execute a list of commands from a file"),
     'update': (upd, 0, "re-initializes banana"),
     'kick': (kick, 2, "Usage: kick <username> <server>\nKicks a player from the server (if cracked)"),
     'shell': (shell, 3, "Usage: shell <host> <port> <bind_port>\nUses netcat to listen to a port"),
@@ -108,8 +108,7 @@ def execmd(cmd):
 
     except Exception as e: error(e)
 
-if __name__ == '__main__':  
-    
+if __name__ == '__main__':
     initialize()
     threading.Thread(target=api).start()
     loadscripts()

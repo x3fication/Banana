@@ -2,11 +2,13 @@ from plugins.common import *
 import requests
 import time
 
-def ogmur(userfile, server, cmdfile):
+def ogmur(userfile, server, cmdfile, keep):
     try:
         if not checkserver(server):
             error('Please input a real domain or server')
             return
+
+        elif keep not in ['true', 'false']: error('Please enter a valid value: yes/no'); return
 
         if ':' in server:
             dorize = server.split(':')
@@ -55,12 +57,13 @@ def ogmur(userfile, server, cmdfile):
                 time.sleep(0.5)
 
             success(f'All commands have been sent for {username}')
-            requests.post('http://localhost:6969/disconnect', json={
-                "host": server,
-                "port": port,
-                "username": username
-            })
-
+            if keep == 'false':
+                requests.post('http://localhost:6969/disconnect', json={
+                    "host": server,
+                    "port": port,
+                    "username": username
+                })
+                success(f'{username} has been disconnected')
             time.sleep(3)
 
     except Exception as e:
