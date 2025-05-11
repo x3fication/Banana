@@ -33,9 +33,9 @@ commands = {
     'proxy': (proxy, 2, "Usage: proxy <ip> <mode>\nStarts a local Velocity proxy server that redirects to the specified server."),
     'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
     'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
-    'clear': (clear, 0, "Clears the screen"),
+    'clear': (clear, 0, "clears the screen"),
     'ogmur': (ogmur, 3, "Usage: ogmur <users_file> <server> <commands_file>\nSends a bot that will execute a list of commands from a file"),
-    'update': (upd, 0, "Re-Initializes banana"),
+    'update': (upd, 0, "re-initializes banana"),
     'kick': (kick, 2, "Usage: kick <username> <server>\nKicks a player from the server (if cracked)"),
     'shell': (shell, 3, "Usage: shell <host> <port> <bind_port>\nUses netcat to listen to a port"),
     'connect': (connect, 2, "Usage: connect <username> <server>\nJoins with a bot and allows you to send messages"),
@@ -49,13 +49,12 @@ commands = {
 def chelp(command=None):
     if command is None:
         print(f"{yellow}[{white}Available Commands{yellow}]")
-        for cmd, (func, args, msg) in sorted(commands.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{cmd}{yellow}] {white}- {msg.splitlines()[0]}")
-        for name, script in sorted(scripts.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{name}{yellow}] {white}- {script['usage'].splitlines()[0]}")
-    
+        max_len = max(len(f"{yellow}[{white}{cmd}{yellow}]") for cmd in commands)
+        for cmd, (func, args, msg) in sorted(commands.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{cmd}{yellow}]".ljust(max_len) + f" {white}- {msg.splitlines()[0].replace('Usage: ', '')}")
+        for name, script in sorted(scripts.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{name}{yellow}]".ljust(max_len) + f" {white}- {script['usage'].splitlines()[0].replace('Usage: ', '')}")
     elif command in commands: _, _, msg = commands[command]; print(msg)
     elif command in scripts: print(scripts[command]['usage'])
-    else: print(f'Unknown Command')
-
+    else: print('Unknown Command')
 
 
 def loadscripts(folder='scripts'):
