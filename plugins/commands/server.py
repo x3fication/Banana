@@ -7,7 +7,7 @@ def server(server):
         if ':' in server: x310 = server.split(':'); host = x310[0]; port = x310[1]
         else: host = server
         if checkserver(server) == False: error('Please input a real domain or server'); return
-        lookup = JavaServer.lookup(f'{host}:25565' if not ':' in server else {f'{host}:{port}'})
+        lookup = JavaServer.lookup(f'{host}:25565' if not ':' in server else f'{host}:{port}')
         status = lookup.status()
     
         print(f"""{yellow}[{white}IP{yellow}]{white} {socket.gethostbyname(server if not ':' in server else server.split(':')[0])}

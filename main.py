@@ -20,6 +20,7 @@ from plugins.commands.sendcmd import sendcmd
 from plugins.commands.shell import shell
 from plugins.commands.ogmur import ogmur
 from plugins.commands.target import target
+from plugins.commands.fakeproxy import fakeproxy
 
 scripts = {}
 
@@ -30,7 +31,8 @@ commands = {
     'monitor': (monitor, 1, "Usage: monitor <ip>\nMonitors who leaves and joins on a specified server (if queries are enabled)"),
     'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
     'target': (target, 1, "Usage: target <domain>\nShows all subdomains w/ their resolved ips"),
-    'proxy': (proxy, 2, "Usage: proxy <ip> <mode>\nStarts a local Velocity proxy server that redirects to the specified server."),
+    'proxy': (proxy, 2, "Usage: proxy <ip> <mode>\nStarts a Velocity proxy server that redirects to the specified server."),
+    'fakeproxy': (fakeproxy, 2, "Usage: fakeproxy <ip> <mode>\nStarts a Velocity proxy server that logs all commands sent to the server."),
     'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
     'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
     'clear': (clear, 0, "clears the screen"),
@@ -55,9 +57,6 @@ def chelp(command=None):
     elif command in commands: _, _, msg = commands[command]; print(msg)
     elif command in scripts: print(scripts[command]['usage'])
     else: print(f'Unknown Command')
-
-
-
 
 def loadscripts(folder='scripts'):
     if not os.path.exists(folder): return

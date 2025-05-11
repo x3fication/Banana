@@ -50,22 +50,22 @@ def velocity():
     os.makedirs('./proxy/velocity/', exist_ok=True)
     with open('./proxy/velocity/velocity.jar', 'wb') as f:
         f.write(download.content)
-    success(f'Done downloading Velocity')
-    time.sleep(1)
-
-def waterfall():
-    info('Downloading Waterfall [PaperMC]')
-    download = requests.get(f"https://mineacademy.org/api/waterfall/latest")
-    os.makedirs('./proxy/waterfall/', exist_ok=True)
-    with open('./proxy/waterfall/waterfall.jar', 'wb') as f:
+    success(f'Done downloading velocity.jar')
+    info('Setting up FakeProxy')
+    os.makedirs('./proxy/fakeproxy/', exist_ok=True)
+    fp = requests.get(f"https://github.com/Renovsk/Plantain/releases/download/fp-1/plantain-fakeproxy-1.0.jar")
+    with open('./proxy/fakeproxy/velocity.jar', 'wb') as f:
         f.write(download.content)
-    success(f'Done downloading Waterfall')
+
+    os.makedirs('./proxy/fakeproxy/plugins/', exist_ok=True)
+    with open('./proxy/fakeproxy/plugins/plantain-fakeproxy-1.0.jar', 'wb') as f:
+        f.write(fp.content)
+    success('Done downloading plantain-fakeproxy-1.0.jar')
     time.sleep(1)
 
 def upd(): # this is prob retarded way to do it ik
     node()
     velocity()
-    waterfall()
 
 def initialize():
     if firstload() == True:
@@ -87,7 +87,6 @@ V  \
         ''')
         node()
         velocity()
-        waterfall()
         animate()
         loadmenu()
 
