@@ -48,13 +48,15 @@ commands = {
 
 def chelp(command=None):
     if command is None:
-        print(f"{yellow}[{white}Available Commands{yellow}]")
-        max_len = max(len(f"{yellow}[{white}{cmd}{yellow}]") for cmd in commands)
-        for cmd, (func, args, msg) in sorted(commands.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{cmd}{yellow}]".ljust(max_len) + f" {white}- {msg.splitlines()[0].replace('Usage: ', '')}")
-        for name, script in sorted(scripts.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{name}{yellow}]".ljust(max_len) + f" {white}- {script['usage'].splitlines()[0].replace('Usage: ', '')}")
+        print(f"{yellow}┌{white} Available Commands{yellow}")
+        max_len = max(len(cmd) for cmd in commands.keys())
+        for cmd, (func, args, msg) in sorted(commands.items(), key=lambda x: len(x[0])): print(f"{yellow}├ {white}{cmd.ljust(max_len)} {white}- {msg.splitlines()[0].replace('Usage: ', '')}")
+        for name, script in sorted(scripts.items(), key=lambda x: len(x[0])): print(f"{yellow}├ {white}{name.ljust(max_len)} {white}- {script['usage'].splitlines()[0].replace('Usage: ', '')}")
     elif command in commands: _, _, msg = commands[command]; print(msg)
     elif command in scripts: print(scripts[command]['usage'])
-    else: print('Unknown Command')
+    else: print(f'Unknown Command')
+
+
 
 
 def loadscripts(folder='scripts'):
