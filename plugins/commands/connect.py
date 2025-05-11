@@ -15,12 +15,12 @@ def connect(username, server):
 
         while True:
             r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
-            if r == True: break
+            if r: break
             logging.info('Waiting for connection...')
             time.sleep(1)
         
         logging.info(f'Type "exit" to exit. [beta] this is still very shit but it works for sending messages')
-        while True: 
+        while True:
             msg = input('> ').strip()
             if msg.lower() == "exit":
                 if requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']:

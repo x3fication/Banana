@@ -39,13 +39,7 @@ app.post('/connect', (req, res) => {
     console.log(`[Bot] Spawned on ${server}`);
     statuz[server][username].connected = true;
   });
-  bot.on('end', () => {
-    console.log(`[Bot] Disconnected from ${server}`);
-    delete botz[server][username];
-    delete statuz[server][username];
-    if (!Object.keys(botz[server]).length) delete botz[server];
-    if (!Object.keys(statuz[server]).length) delete statuz[server];
-  });
+
   bot.on('error', err => console.log(`[Bot] ${username} @ ${server}: ${err.message}`));
 
   res.json({ message: 'Bot is connecting...', server, username, status: 'connecting' });
