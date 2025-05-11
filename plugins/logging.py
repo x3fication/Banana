@@ -5,8 +5,10 @@ yellow = Fore.YELLOW + Style.BRIGHT
 red = Fore.RED + Style.BRIGHT
 green = Fore.GREEN + Style.BRIGHT
 
+from datetime import datetime
+
 def format(symbol, color, message):
-    print(f'{yellow}[ {color}{symbol} {yellow}] {message}')
+    print(f'{yellow}{white}{datetime.now().strftime('%H:%M')} {yellow}[ {color}{symbol} {yellow}] {message}')
 
 def error(message):
     format('x', red, message)

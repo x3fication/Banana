@@ -38,13 +38,21 @@ def animate():
     
 
 # Loads the menu or something
+
+r"""         _   
+       _ \'-_,#
+      _\'--','`|
+      \`---`  /
+       `----'`
+"""
+
 def loadmenu():
     print("\033c", end="")
     print(rf'''
 {yellow}      ___                          
-     / _ )___ ____  ___ ____  ___ _
-    / _  / _ `/ _ \/ _ `/ _ \/ _ `/
-   /____/\_,_/_//_/\_,_/_//_/\_,_/ {white}
+     / _ )___ ____  ___ ____  ___ _        
+    / _  / _ `/ _ \/ _ `/ _ \/ _ `/        
+   /____/\_,_/_//_/\_,_/_//_/\_,_/ {white} 
 ┣────────────────────────────────────┫
     {white}Hello {os.getlogin()}. Welcome to {yellow}BANANA
     {white}Type {yellow}help{white} to view the commands
