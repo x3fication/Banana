@@ -20,7 +20,7 @@ def node():
         os.system('winget install OpenJS.NodeJS')
         time.sleep(2)
         logging.info('Installing mineflayer, express')
-        subprocess.run('"C:\Program Files/nodejs/npm.cmd" install mineflayer express', shell=True)
+        subprocess.run(r'"C:\Program Files/nodejs/npm.cmd" install mineflayer express', shell=True)
 
 
     elif os.name == 'posix':
