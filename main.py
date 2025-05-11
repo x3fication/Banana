@@ -49,14 +49,13 @@ commands = {
 def chelp(command=None):
     if command is None:
         print(f"{yellow}[{white}Available Commands{yellow}]")
-        for cmd, (func, args, msg) in commands.items(): print(f"{yellow}[{white}{cmd}{yellow}] {white}- {msg.splitlines()[0]}")
-        for name, script in scripts.items(): print(f"{yellow}[{white}{name}{yellow}] {white}- {script['usage'].splitlines()[0]}")
-    elif command in commands:
-        _, _, msg = commands[command]
-        print(msg)
-    elif command in scripts:
-        print(scripts[command]['usage'])
+        for cmd, (func, args, msg) in sorted(commands.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{cmd}{yellow}] {white}- {msg.splitlines()[0]}")
+        for name, script in sorted(scripts.items(), key=lambda x: len(x[0])): print(f"{yellow}[{white}{name}{yellow}] {white}- {script['usage'].splitlines()[0]}")
+    
+    elif command in commands: _, _, msg = commands[command]; print(msg)
+    elif command in scripts: print(scripts[command]['usage'])
     else: print(f'Unknown Command')
+
 
 
 def loadscripts(folder='scripts'):
@@ -87,9 +86,7 @@ def api():
 def execmd(cmd):
     try:
         part = cmd.split()
-        if len(part) == 0:
-            return
-
+        if len(part) == 0: return
         command = part[0]
         args = part[1:]
 
@@ -99,16 +96,13 @@ def execmd(cmd):
 
         elif command in commands:
             func, required_args, msg = commands[command]
-            if len(args) == required_args:
-                func(*args)
+            if len(args) == required_args: func(*args)
             else: print(msg)
 
         elif command in scripts:
             script = scripts[command]
-            if len(args) == len(script["arguments"]):
-                script["module"].run(dict(zip(script["arguments"], args)))
-            else:
-                print(script["usage"])
+            if len(args) == len(script["arguments"]): script["module"].run(dict(zip(script["arguments"], args)))
+            else: print(script["usage"])
 
         else: print('Unknown Command')
 
@@ -121,6 +115,6 @@ if __name__ == '__main__':
 
     while True:
         try:
-            cmd = input(f'{white}{os.getlogin()}@{yellow}banana:~{white}$ ')
+            cmd = input(f'{underline}{yellow}banana{reset} > ')
             execmd(cmd)
         except KeyboardInterrupt: pass

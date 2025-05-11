@@ -4,10 +4,13 @@ from plugins.logging import *
 import time
 from plugins.minecolor import parse
 
-white = Fore.WHITE
-yellow = Fore.YELLOW + Style.BRIGHT
+white = '\033[38;2;255;255;255m'
+reset = '\033[0m'
+yellow = '\033[38;2;255;252;189m'
+bgyellow = '\033[48;2;255;252;189m'
 red = Fore.RED + Style.BRIGHT
 green = Fore.GREEN + Style.BRIGHT
+underline = '\033[4m'
 
 clear = lambda: loadmenu(); print("\033c", end="")
 
@@ -54,7 +57,7 @@ def loadmenu():
     / _  / _ `/ _ \/ _ `/ _ \/ _ `/        
    /____/\_,_/_//_/\_,_/_//_/\_,_/ {white} 
 ┣────────────────────────────────────┫
-    {white}Hello {os.getlogin()}. Welcome to {yellow}BANANA
+    {white}Hello {os.getlogin()}. Welcome to {yellow}BANANA{reset}
     {white}Type {yellow}help{white} to view the commands
 ''')
 
