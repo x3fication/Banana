@@ -29,7 +29,9 @@ def ogmur(userfile, server, cmdfile):
                 return error(f'Failed to connect [{response.status_code}]')
 
             server_key = f"{server}:{port}"
-            while not requests.get('http://localhost:6969/status').json().get(server_key, {}).get(username, {}).get('connected', False):
+            while True:
+                r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
+                if r == True: break
                 info('Waiting for connection...')
                 time.sleep(1)
 

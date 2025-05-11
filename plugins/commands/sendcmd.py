@@ -14,7 +14,9 @@ def sendcmd(username, server, file):
         if response.status_code != 200 and response.status_code != 400:
             return error(f'Failed to connect [{response.status_code}]')
         success('Connected')
-        while not requests.get('http://localhost:6969/status').json()[server + ':' + port][username]:
+        while True:
+            r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
+            if r == True: break
             info('Waiting for connection...')
             time.sleep(1)
         

@@ -11,12 +11,13 @@ def kick(username, server):
             "host": server, "port": port, "username": username
         })
         if response.status_code != 200: return error(f'Failed to connect [{response.status_code}]')
-        while not requests.get('http://localhost:6969/status').json()[server + ':' + port][username]:
+        while True:
+            r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
+            if r == True: break
             info('Waiting for connection...')
             time.sleep(1)
-        
-        while requests.get('http://localhost:6969/status').json()[server + ':' + port][username]:
-            requests.post('http://localhost:6969/disconnect', json={"host": server, "port": 25565 if not ':' in server else port, "username": username})
+            
+        requests.post('http://localhost:6969/disconnect', json={"host": server, "port": 25565 if not ':' in server else port, "username": username})
         
         info(f'Bot disconnected.')
         success(f'Successfully kicked {username}')

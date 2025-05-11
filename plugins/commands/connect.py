@@ -14,8 +14,8 @@ def connect(username, server):
             return error(f'Failed to connect [{response.status_code}]')
 
         while True:
-            r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['status']
-            if r == 'connected': break
+            r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
+            if r == True: break
             info('Waiting for connection...')
             time.sleep(1)
         
