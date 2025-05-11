@@ -1,4 +1,4 @@
-import os, re
+import os, re, json
 from colorama import Fore, Style
 from plugins.logging import *
 import time
@@ -24,6 +24,38 @@ def firstload():
     
     # If banana exists will return False
     return False
+
+def bananac():
+    default = {
+        "server": {
+            "port": 23457,
+            "randomize_port": False
+        }
+    }
+
+    if not os.path.exists('config.json'):
+        with open('config.json', 'w') as f:
+            json.dump(default, f, indent=2)
+        return default
+
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+
+    change = False
+
+    if not isinstance(config['server']['port'], int) or not (1 <= config['server']['port'] <= 65535):
+        config["server"]["port"] = default["server"]["port"]
+        change = True
+
+    if not isinstance(config['server']['randomize_port'], bool):
+        config["server"]["randomize_port"] = default["server"]["randomize_port"]
+        change = True
+
+    if change:
+        with open('config.json', 'w') as f:
+            json.dump(config, f, indent=2)
+
+    return config
 
 def animate():
     print("\033c", end="")

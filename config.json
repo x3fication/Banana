@@ -1,0 +1,6 @@
+{
+  "server": {
+    "port": 23457,
+    "randomize_port": false
+  }
+}
