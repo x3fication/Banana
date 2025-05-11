@@ -17,9 +17,10 @@ def node():
     print('Downloading nodeJS')
 
     if os.name == 'nt':
-        os.system(r'winget install OpenJS.NodeJS')
+        subprocess.run(r'winget install OpenJS.NodeJS', shell=True)
         time.sleep(2)
-        os.system('npm install mineflayer express')
+        info('Installing mineflayer, express')
+        subprocess.run('cmd /k npm install mineflayer express', shell=True)
 
 
     elif os.name == 'posix':
@@ -87,7 +88,8 @@ V  \
         ''')
         node()
         velocity()
-        quit()
+        animate()
+        loadmenu()
 
     elif firstload() == False: animate(); loadmenu()
     
