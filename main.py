@@ -30,7 +30,7 @@ commands = {
     'server': (server, 1, "Usage: server <address>\nShows information about the server"),
     'uuid': (puuid, 1, "Usage: uuid <ign>\nShows player's uuid"),
     'ipinfo': (ipinfo, 1, "Usage: ipinfo <ip>\nShows information about given IP"),
-    'fetch': (fetch, 1, "Usage: scrape <type>\nScrapes a proxy type"),
+    'fetch': (fetch, 1, "Usage: fetch <type>\nScrapes a proxy type"),
     'monitor': (monitor, 1, "Usage: monitor <ip>\nMonitors who leaves and joins on a specified server (if queries are enabled)"),
     'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
     'target': (target, 1, "Usage: target <domain>\nShows all subdomains w/ their resolved ips"),
