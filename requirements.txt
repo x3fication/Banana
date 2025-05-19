@@ -6,3 +6,4 @@ mcrcon
 dnspython
 toml
 pyperclip
+requests[socks]

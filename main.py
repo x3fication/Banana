@@ -11,6 +11,7 @@ from plugins.commands.fuzz import fuzz
 from plugins.commands.ipinfo import ipinfo
 from plugins.commands.dns import lookup
 from plugins.commands.checker import check
+from plugins.commands.scan import mcscan
 from plugins.commands.scan import scan
 from plugins.commands.monitor import monitor
 from plugins.commands.proxy import proxy
@@ -21,6 +22,7 @@ from plugins.commands.shell import shell
 from plugins.commands.ogmur import ogmur
 from plugins.commands.target import target
 from plugins.commands.fakeproxy import fakeproxy
+from plugins.commands.fetch import fetch
 
 scripts = {}
 
@@ -28,13 +30,15 @@ commands = {
     'server': (server, 1, "Usage: server <address>\nShows information about the server"),
     'uuid': (puuid, 1, "Usage: uuid <ign>\nShows player's uuid"),
     'ipinfo': (ipinfo, 1, "Usage: ipinfo <ip>\nShows information about given IP"),
+    'fetch': (fetch, 1, "Usage: scrape <type>\nScrapes a proxy type"),
     'monitor': (monitor, 1, "Usage: monitor <ip>\nMonitors who leaves and joins on a specified server (if queries are enabled)"),
     'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
     'target': (target, 1, "Usage: target <domain>\nShows all subdomains w/ their resolved ips"),
     'proxy': (proxy, 2, "Usage: proxy <ip> <mode>\nStarts a Velocity proxy server that redirects to the specified server."),
     'fakeproxy': (fakeproxy, 2, "Usage: fakeproxy <ip> <mode>\nStarts a Velocity proxy server that logs all commands sent to the server."),
     'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
-    'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
+    'mcscan': (mcscan, 3, "Usage: mcscan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
+    'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nPerform a multi-threaded TCP port scan on a given IP address\nExample: scan 0.0.0.0 1-65535 10"),
     'clear': (clear, 0, "clears the screen"),
     'ogmur': (ogmur, 4, "Usage: ogmur <users_file> <server> <commands_file> <stay_logged>\nSends a bot that will execute a list of commands from a file"),
     'update': (upd, 0, "re-initializes banana"),

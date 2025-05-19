@@ -4,6 +4,7 @@ from plugins.logging import *
 import time
 from plugins.minecolor import mcparse
 import requests
+import threading
 
 white = '\033[38;2;255;255;255m'
 reset = '\033[0m'
@@ -74,27 +75,19 @@ def animate():
         time.sleep(0.03)
     
 def scrapeproxy(ptype):
-    if ptype.lower() not in ['socks5', 'socks4', 'http', 'https']: logging.error('Please enter a valid proxy type'); return
-    proxylist = {
-        'socks5': f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/socks5/data.txt",
-        'socks4': f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/socks4/data.txt",
-        'http'  : f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/http/data.txt",
-        'https' : f"https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/https/data.txt",
-    }
+    if ptype.lower() not in ['socks5', 'socks4', 'http']: logging.error('Please enter a valid proxy type (socks5, socks4, http)'); return
+    proxies = []
     try:
-        response = requests.get(proxylist[ptype.lower()], timeout=5)
-        proxies = response.text.splitlines()
+        response = requests.get(f'https://raw.githubusercontent.com/RattlesHyper/proxy/main/{ptype}', timeout=5)
+        for site in response.text.splitlines():
+            r = requests.get(site)
+            for proxy in r.text.splitlines():
+                proxies.append(f'{ptype}://{proxy}')
+        logging.info(f'Fetched {len(proxies)} {ptype} proxies')
         return proxies
-    
     except Exception as e: logging.error(e); return
-    
-def checkproxy(proxy):
-    proxies = {'all': proxy,}
-    try:
-        if requests.get('https://google.com', proxies=proxies, timeout=5).status_code == 200: return True
-        return False
-    except: pass
 
+ 
 # Loads the menu or something
 
 r"""         _   
@@ -121,7 +114,7 @@ def checkserver(server):
     if ':' in server:
         server = server.split(':')[0]
     if server == 'localhost': return True
-    ipre = r'\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
+    ipre = r'^((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)\.((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)\.((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)\.((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)$'
     domre = r'^(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})$'
 
     if re.match(domre, server) or re.match(ipre, server):
@@ -130,8 +123,7 @@ def checkserver(server):
 
 
 def checkip(ip):
-    ipre = r'\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b' # ip regex
-    if re.match(ipre, ip):
-        return True
-
+    ipre = r'^((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)\.((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)\.((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)\.((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)|\*)$' # ip regex
+    if re.match(ipre, ip): return True
+    if '*' in ip: return True
     return False
