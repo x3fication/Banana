@@ -7,3 +7,4 @@ dnspython
 toml
 pyperclip
 PySocks
+keyboard

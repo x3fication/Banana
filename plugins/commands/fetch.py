@@ -32,7 +32,7 @@ def checkproxy(proxy: str):
     finally:
         with lock:
             check += 1
-            print(f"\rcheck ({check}) | Good ({len(zeepa)})", end='', flush=True)
+            print(f"\rChecked ({check}) | Good ({len(zeepa)})", end='', flush=True)
 
 def fetch(ptype):
     with open('proxies.txt', 'w') as f: f.write('') # one ohio one ohio one BIG ohio

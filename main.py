@@ -122,3 +122,4 @@ if __name__ == '__main__':
             cmd = input(f'{underline}{yellow}banana{reset} > ')
             execmd(cmd)
         except KeyboardInterrupt: pass
+        except EOFError: pass
