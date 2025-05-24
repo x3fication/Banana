@@ -1,6 +1,8 @@
 {
+  "language": "english",
+  "theme": "banana",
   "server": {
-    "port": 23457,
+    "port": 25579,
     "randomize_port": false
   }
 }

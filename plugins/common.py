@@ -1,20 +1,33 @@
-import os, re, json
-from colorama import Fore, Style
-from plugins.logging import *
+import os
+import re
+import json
 import time
-from plugins.minecolor import mcparse
+import random
 import requests
 import threading
+from plugins.logging import *
+from plugins.theme import theme
+from colorama import Fore, Style
+from plugins.minecolor import mcparse
 
-white = '\033[38;2;255;255;255m'
+
+colorz = theme()
+white = colorz['white']
 reset = '\033[0m'
-yellow = '\033[38;2;255;252;189m'
-bgyellow = '\033[48;2;255;252;189m'
-red = Fore.RED + Style.BRIGHT
-green = Fore.GREEN + Style.BRIGHT
+yellow = colorz['yellow']
+red = colorz['red']
+green = colorz['green']
 underline = '\033[4m'
 
 clear = lambda: loadmenu(); print("\033c", end="")
+
+def ranproxy():
+    with open('proxies.txt', 'r') as f:
+        proxies = [line.strip() for line in f if line.strip()]
+    if not proxies:
+        return None
+    return random.choice(proxies)
+
 
 # Checks if this is the first time that the user loaded banana
 def firstload():
@@ -29,6 +42,8 @@ def firstload():
 
 def bananac():
     default = {
+        "language": "english",
+        "theme": "banana",
         "server": {
             "port": 23457,
             "randomize_port": False
@@ -36,11 +51,11 @@ def bananac():
     }
 
     if not os.path.exists('config.json'):
-        with open('config.json', 'w') as f:
+        with open('config.json', 'w', encoding='utf-8') as f:
             json.dump(default, f, indent=2)
         return default
 
-    with open('config.json', 'r') as f:
+    with open('config.json', 'r', encoding='utf-8') as f:
         config = json.load(f)
 
     change = False
@@ -53,12 +68,34 @@ def bananac():
         config["server"]["randomize_port"] = default["server"]["randomize_port"]
         change = True
 
+    valid_languages = {'jordanian', 'english', 'persian'}
+    lang = config['language']['english']
+    if lang not in valid_languages:
+        config["language"] = default["language"]
+        change = True
+
     if change:
-        with open('config.json', 'w') as f:
+        with open('config.json', 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=2)
 
     return config
 
+import json
+
+def getstring(key):
+    with open('config.json', 'r', encoding='utf-8') as f:
+        config = json.load(f)
+
+    lang = config['language']
+
+    try:
+        with open(f"./translations/{lang}.json", 'r', encoding='utf-8') as f:
+            strings = json.load(f)
+    except FileNotFoundError:
+        with open("./translations/english.json", 'r', encoding='utf-8') as f:
+            strings = json.load(f)
+
+    return strings.get(key, f"[Missing string for '{key}']")
 
 def animate():
     print("\033c", end="")
@@ -75,7 +112,7 @@ def animate():
         time.sleep(0.03)
     
 def scrapeproxy(ptype):
-    if ptype.lower() not in ['socks5', 'socks4', 'http']: logging.error('Please enter a valid proxy type (socks5, socks4, http)'); return
+    if ptype.lower() not in ['socks5', 'socks4']: logging.error('Please enter a valid proxy type (socks5, socks4)'); return
     proxies = []
     try:
         response = requests.get(f'https://raw.githubusercontent.com/RattlesHyper/proxy/main/{ptype}', timeout=5)

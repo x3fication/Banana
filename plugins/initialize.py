@@ -76,8 +76,8 @@ def initialize():
 V  \
  \  \_         
   \,'.`-.                                        
-   |\ `. `.                                      Hello {white}{getlogin()}{yellow},
-   ( \  `. `-.                        _,.-:\     please wait while we setup your environment.
+   |\ `. `.                                      {getstring('inithello')} {white}{getlogin()}{yellow},
+   ( \  `. `-.                        _,.-:\     {getstring('initmsg')}
     \ \   `.  `-._             __..--' ,-';/
      \ `.   `-.   `-..___..---'   _.--' ,'/
       `. `.    `-._        __..--'    ,' /

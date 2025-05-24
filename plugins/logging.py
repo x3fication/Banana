@@ -1,9 +1,11 @@
 from colorama import Fore, Style
+from plugins.theme import theme
 
-white = Fore.WHITE
-yellow = Fore.YELLOW + Style.BRIGHT
-red = Fore.RED + Style.BRIGHT
-green = Fore.GREEN + Style.BRIGHT
+colorz = theme()
+white = colorz['white']
+yellow = colorz['yellow']
+red = colorz['red']
+green = colorz['green']
 
 from datetime import datetime
 

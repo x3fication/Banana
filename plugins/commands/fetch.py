@@ -1,4 +1,5 @@
 import threading
+import time
 import socks
 from plugins.common import *
 import urllib
@@ -10,13 +11,12 @@ lock = threading.Lock()
 nigga = {
     'socks5': socks.SOCKS5,
     'socks4': socks.SOCKS4,
-    'http':   socks.HTTP
 }
 
 def checkproxy(proxy: str):
     global check
     try:
-        if '://' not in proxy: proxy = 'http://' + proxy
+        if '://' not in proxy: proxy = 'socks5://' + proxy
         p = urllib.parse.urlparse(proxy)
         scheme = p.scheme.lower()
         host = p.hostname
@@ -25,7 +25,7 @@ def checkproxy(proxy: str):
         s = socks.socksocket()
         s.set_proxy(nigga[scheme], host, port, username=p.username, password=p.password)
         s.settimeout(5)
-        s.connect(('1.1.1.1', 80))
+        s.connect(('8.8.8.8', 80))
         s.close()
         with lock: zeepa.append(proxy)
     except Exception: pass

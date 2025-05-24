@@ -23,42 +23,60 @@ from plugins.commands.ogmur import ogmur
 from plugins.commands.target import target
 from plugins.commands.fakeproxy import fakeproxy
 from plugins.commands.fetch import fetch
+from plugins.commands.edit import edit
 
 scripts = {}
 
+
+"""
+    if u want to add ur own commands do here is the format
+        (func, required_args, optional_args, usage)
+"""
+
 commands = {
-    'server': (server, 1, "Usage: server <address>\nShows information about the server"),
-    'uuid': (puuid, 1, "Usage: uuid <ign>\nShows player's uuid"),
-    'ipinfo': (ipinfo, 1, "Usage: ipinfo <ip>\nShows information about given IP"),
-    'fetch': (fetch, 1, "Usage: fetch <type>\nScrapes a proxy type"),
-    'monitor': (monitor, 1, "Usage: monitor <ip>\nMonitors who leaves and joins on a specified server (if queries are enabled)"),
-    'dns': (lookup, 1, "Usage: dns <domain>\nShows all dns records of domain"),
-    'target': (target, 1, "Usage: target <domain>\nShows all subdomains w/ their resolved ips"),
-    'proxy': (proxy, 2, "Usage: proxy <ip> <mode>\nStarts a Velocity proxy server that redirects to the specified server."),
-    'fakeproxy': (fakeproxy, 2, "Usage: fakeproxy <ip> <mode>\nStarts a Velocity proxy server that logs all commands sent to the server."),
-    'check': (check, 1, "Usage: check <file>\nCheck the status of Minecraft servers listed in a specified text file"),
-    'mcscan': (mcscan, 3, "Usage: mcscan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10"),
-    'scan': (scan, 3, "Usage: scan <ip> <range> <threads>\nPerform a multi-threaded TCP port scan on a given IP address\nExample: scan 0.0.0.0 1-65535 10"),
-    'clear': (clear, 0, "clears the screen"),
-    'ogmur': (ogmur, 4, "Usage: ogmur <users_file> <server> <commands_file> <stay_logged>\nSends a bot that will execute a list of commands from a file"),
-    'update': (upd, 0, "re-initializes banana"),
-    'kick': (kick, 2, "Usage: kick <username> <server>\nKicks a player from the server (if cracked)"),
-    'shell': (shell, 3, "Usage: shell <host> <port> <bind_port>\nUses netcat to listen to a port"),
-    'connect': (connect, 2, "Usage: connect <username> <server>\nJoins with a bot and allows you to send messages"),
-    'rcon': (rcon, 2, "Usage: rcon <server> <password>\nConnects to a server's rcon"),
-    'brutrcon': (rconbrut, 2, "Usage: brutrcon <server> <file>\nTries the passwords of the file given to try to connect to rcon"),
-    'fuzz': (fuzz, 3, "Usage: fuzz <website> <file> <threads>\nExample: example.com/FUZZ or FUZZ.example.com"),
-    'sendcmd': (sendcmd, 3, "Usage: sendcmd <username> <server> <commands_file>\nSends a bot that will execute a list of commands from a file"),
-    'exit': (exit, 0, "exit this fuckass app")
+
+    'server':   (server, 1, 0, getstring('serverh')),
+    'edit':     (edit, 2, 0, getstring('edith')),
+    'uuid':     (puuid, 1, 0, getstring('uuidh')),
+    'ipinfo':   (ipinfo, 1, 0, getstring('ipinfoh')),
+    'fetch':    (fetch, 1, 0, getstring('fetchh')),
+    'monitor':  (monitor, 1, 0, getstring('monitorh')),
+    'dns':      (lookup, 1, 0, getstring('dnsh')),
+    'target':   (target, 1, 0, getstring('targeth')),
+    'proxy':    (proxy, 2, 0, getstring('serverh')),
+    'fakeproxy':(fakeproxy, 2, 0, getstring('fakeproxyh')),
+    'check':    (check, 1, 0, getstring('checkh')),
+    'mcscan':   (mcscan, 3, 0, getstring('mcscanh')),
+    'scan':     (scan, 3, 0, getstring('scanh')),
+    'clear':    (clear, 0, 0, getstring('clearh')),
+    'ogmur':    (ogmur, 4, 1, getstring('ogmurh')),
+    'update':   (upd, 0, 0, getstring('updateh')),
+    'kick':     (kick, 2, 1, getstring('kickh')),
+    'shell':    (shell, 3, 0, getstring('shellh')),
+    'connect':  (connect, 2, 1, getstring('connecth')),
+    'rcon':     (rcon, 2, 0, getstring('rconh')),
+    'brutrcon': (rconbrut, 2, 0, getstring('brutrconh')),
+    'fuzz':     (fuzz, 3, 0, getstring('fuzzh')),
+    'sendcmd':  (sendcmd, 3, 1, getstring('sendcmdh')),
+    'exit':     (exit, 0, 0, getstring('exith'))
 }
 
 def chelp(command=None):
     if command is None:
         print(f"{yellow}┌{white} Available Commands{yellow}")
         max_len = max(len(cmd) for cmd in commands.keys())
-        for cmd, (func, args, msg) in sorted(commands.items(), key=lambda x: len(x[0])): print(f"{yellow}├ {white}{cmd.ljust(max_len)} {white}- {msg.splitlines()[0].replace('Usage: ', '')}")
-        for name, script in sorted(scripts.items(), key=lambda x: len(x[0])): print(f"{yellow}├ {white}{name.ljust(max_len)} {white}- {script['usage'].splitlines()[0].replace('Usage: ', '')}")
-    elif command in commands: _, _, msg = commands[command]; print(msg)
+
+        for cmd, entry in sorted(commands.items(), key=lambda x: len(x[0])):
+            if len(entry) == 3: func, args, msg = entry
+            else: func, args, opt_args, msg = entry
+            print(f"{yellow}├ {white}{cmd.ljust(max_len)} {white}- {msg.splitlines()[0].replace('Usage: ', '')}")
+
+    elif command in commands:
+        entry = commands[command]
+        if len(entry) == 3: _, _, msg = entry
+        else: _, _, _, msg = entry
+        print(msg)
+
     elif command in scripts: print(scripts[command]['usage'])
     else: print(f'Unknown Command')
 
@@ -91,30 +109,41 @@ def execmd(cmd):
     try:
         part = cmd.split()
         if len(part) == 0: return
-        command = part[0]
-        args = part[1:]
-
+        command, *args = part
         if command == "help":
-            if len(args) == 0: chelp()
-            elif len(args) == 1: chelp(args[0])
-
-        elif command in commands:
-            func, required_args, msg = commands[command]
-            if len(args) == required_args: func(*args)
-            else: print(msg)
-
-        elif command in scripts:
+            chelp(args[0] if args else None)
+            return
+        if command in commands:
+            func, required_args, *rest = commands[command]
+            optional_args = 0
+            usage = ''
+            if rest:
+                if len(rest) == 2:
+                    optional_args, usage = rest
+                else:
+                    usage = rest[0]
+            if required_args <= len(args) <= required_args + optional_args:
+                func(*args)
+            else:
+                print(usage)
+            return
+        if command in scripts:
             script = scripts[command]
-            if len(args) == len(script["arguments"]): script["module"].run(dict(zip(script["arguments"], args)))
-            else: print(script["usage"])
+            if len(args) == len(script["arguments"]):
+                script["module"].run(dict(zip(script["arguments"], args)))
+            else:
+                print(script["usage"])
+            return
+        print('Unknown Command')
+    except Exception as e:
+        logging.error(e)
 
-        else: print('Unknown Command')
 
     except Exception as e: logging.error(e)
 
 if __name__ == '__main__':
     initialize()
-    threading.Thread(target=api).start()
+    threading.Thread(target=api, daemon=True).start()
     loadscripts()
 
     while True:
