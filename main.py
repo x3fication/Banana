@@ -43,7 +43,7 @@ commands = {
     'monitor':  (monitor, 1, 0, getstring('monitorh')),
     'dns':      (lookup, 1, 0, getstring('dnsh')),
     'target':   (target, 1, 0, getstring('targeth')),
-    'proxy':    (proxy, 2, 0, getstring('serverh')),
+    'proxy':    (proxy, 2, 0, getstring('proxyh')),
     'fakeproxy':(fakeproxy, 2, 0, getstring('fakeproxyh')),
     'check':    (check, 1, 0, getstring('checkh')),
     'mcscan':   (mcscan, 3, 0, getstring('mcscanh')),
