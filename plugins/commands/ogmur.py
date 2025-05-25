@@ -29,7 +29,7 @@ def ogmur(userfile, server, cmdfile, keep, proxy=None):
                 r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
                 if r == True: connected = True;break
                 logging.info('Waiting for connection...')
-                time.sleep(1)
+                time.sleep(2)
 
             logging.success(f'Connected {username}')
 

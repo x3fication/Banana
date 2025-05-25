@@ -11,6 +11,7 @@ from colorama import Fore, Style
 from plugins.minecolor import mcparse
 
 
+
 colorz = theme()
 white = colorz['white']
 reset = '\033[0m'

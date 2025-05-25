@@ -16,7 +16,7 @@ def kick(username, server, proxy=None):
             r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
             if r == True: connected = True; break
             logging.info('Waiting for connection...')
-            time.sleep(1)
+            time.sleep(2)
         
         if connected: requests.post('http://localhost:6969/disconnect', json={"host": server, "port": port, "username": username}); logging.info(f'Bot disconnected.'); logging.success(f'Successfully kicked {username}')
 

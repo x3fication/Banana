@@ -18,7 +18,7 @@ def connect(username, server, proxy=None):
             r = requests.get('http://localhost:6969/status').json()[server + ':' + str(port)][username]['connected']
             if r: connected = True; break
             logging.info('Waiting for connection...')
-            time.sleep(1)
+            time.sleep(2)
 
         if connected:
             logging.info(f'Type "exit" to exit. [beta] this is still very shit but it works for sending messages')
