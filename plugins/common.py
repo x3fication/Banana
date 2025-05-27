@@ -70,7 +70,7 @@ def bananac():
         change = True
 
     valid_languages = {'jordanian', 'english', 'persian'}
-    lang = config['language']['english']
+    lang = config['language']
     if lang not in valid_languages:
         config["language"] = default["language"]
         change = True
