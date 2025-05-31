@@ -13,7 +13,7 @@
 
 ### Requirements
 
-* Python 3.10+
+* Python 3.10+ (don't forget to add to path)
 * Winget package manager (Windows only)
 
 ### Setup
