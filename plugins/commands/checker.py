@@ -10,3 +10,4 @@ def check(file):
                 status = lookup.status()
                 logging.success(f"{yellow}({white}{server}{yellow})({white}{status.players.online}/{status.players.max}{yellow})({white}{round(status.latency)}ms{yellow})({white}{status.version.name}{yellow})({white}{status.version.protocol}{yellow})")
         except TimeoutError: pass
+        except Exception: pass
