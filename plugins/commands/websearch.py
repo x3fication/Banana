@@ -32,7 +32,10 @@ def checks(server, online_filter, maximum_ping, save, filename):
                     f.seek(0)
                     servers = f.readlines()
                     if server not in servers:
-                        f.write(f'({server})({online}/{max_players})({ping}ms)({motd.replace("\n", "").replace("\r", "")})({version})\n')
+                        # fuck you nigga python 3.11
+                        nl = '\n'
+                        cr = '\r'
+                        f.write(f'({server})({online}/{max_players})({ping}ms)({motd.replace(nl, "").replace(cr, "")})({version})\n')
     except Exception:
         pass
 
