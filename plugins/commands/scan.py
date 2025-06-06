@@ -10,7 +10,7 @@ def chico2(server, save, file):
         status = lookup.status()
         # logging.success(f"{yellow}({white}{server}{yellow})({white}{status.players.online}/{status.players.max}{yellow})({white}{round(status.latency)}ms{yellow})({white}{status.version.name}{yellow})({white}{status.version.protocol}{yellow})")
         if save:
-            with open(fr'./output/banana.txt' if file == None else fr'./output/{str(file).split('.')[0]}-travel.txt', 'a+', encoding='UTF-8') as f:
+            with open(fr'./output/banana.txt' if file is None else fr'./output/{str(file).split(".")[0]}-travel.txt', 'a+', encoding='UTF-8') as f:
                 servers = f.readlines()
                 if server not in servers: f.write(f'({server})({status.players.online}/{status.players.max})({round(status.latency)}ms)({status.version.name})({status.version.protocol})\n')
 
@@ -45,7 +45,7 @@ def mcscan2(server, ports, mthreads, save=False, file=None):
 def wow(ip12xxx):
     parts = ip12xxx.split('.')
     if len(parts) != 4: return [ip12xxx]
-    
+
     ranges = []
     for part in parts:
         if part == '*': ranges.append(range(1, 256))
