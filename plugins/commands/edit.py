@@ -11,7 +11,8 @@ default = {
     }
 }
 
-languages = ["arabic", "chinese", "czech", "english", "french", "german", "hindi", "japanese", "korean", "russian", "spanish", "turkish"]
+# languages = ["arabic", "chinese", "czech", "english", "french", "german", "hindi", "japanese", "korean", "russian", "spanish", "turkish"]
+languages = ["english"]
 themes = ["banana", "charcoal", "lily", "sunset", "snow"]
 
 def edit(tf, value=None):
@@ -32,8 +33,8 @@ def edit(tf, value=None):
     
     final_key = keys[-1]
     if value is None:
-        if tf == "language": logging.info(f"Values for language: {white} {','.join(languages)}"); return
-        elif tf == "theme": logging.info(f"Values for theme: {white} {','.join(themes)}"); return
+        if tf == "language": logging.info(f"Values for language: {white}{','.join(languages)}"); return
+        elif tf == "theme": logging.info(f"Values for theme: {white}{','.join(themes)}"); return
     
     if isinstance(d.get(final_key), bool) and isinstance(value, str):
         if value.lower() in ['true', '1', 'yes']: value = True

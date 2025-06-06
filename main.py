@@ -25,6 +25,7 @@ from plugins.commands.fakeproxy import fakeproxy
 from plugins.commands.fetch import fetch
 from plugins.commands.edit import edit
 from plugins.commands.bungeeguard import bungee
+from plugins.commands.websearch import web
 
 scripts = {}
 
@@ -36,9 +37,10 @@ scripts = {}
 
 def getcmds(): # ts to dynamically update language like mr. ray wanted..
     return {
+        'websearch':(web, 0, 0, "ohio"),
         'server':   (server, 1, 0, getstring('serverh')),
         'edit':     (edit, 1, 1, getstring('edith')),
-        'bungee':   (bungee, 2, 0, "Usage: bungee <ip> <bungeeguard_token>\nMakes a bungeeguard proxy"),
+        'bungeeguard':(bungee, 2, 0, "Usage: bungeeguard <ip> <bungeeguard_token>\nMakes a bungeeguard proxy"),
         'uuid':     (puuid, 1, 0, getstring('uuidh')),
         'ipinfo':   (ipinfo, 1, 0, getstring('ipinfoh')),
         'fetch':    (fetch, 1, 0, getstring('fetchh')),
@@ -100,7 +102,7 @@ def loadscripts(folder='scripts'):
 
 def api():
     gg = os.path.join(os.getcwd(), "api")
-    subprocess.run(fr'"C:\Program Files/nodejs/node.exe" server.js',
+    subprocess.run(fr'"C:\Program Files/nodejs/node.exe" server.js' if os.name == 'nt' else 'node server.js',
         cwd=os.path.join(gg),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,

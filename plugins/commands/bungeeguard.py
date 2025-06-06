@@ -5,7 +5,7 @@ import string
 def bungee(ip, forwarding):
     try:
         p = "proxy/velocity"
-        with open(f"{p}/forwarding.secret", "w", encoding="utf-8") as f:
+        with open(f"{p}/forwarding.secret", "w") as f:
             f.write(forwarding)
         if not checkserver(ip): logging.error('Please input a real domain or server'); return
         port = bananac()['server']['port'] if not bananac()['server']['randomize_port'] else random.randint(20000, 30000)

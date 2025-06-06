@@ -8,10 +8,8 @@ import threading
 from plugins.logging import *
 from plugins.theme import theme
 from colorama import Fore, Style
-from plugins.minecolor import mcparse
 
-
-
+prots = ["TCPShield", 'NeoProtect', 'Cloudflare']
 colorz = theme()
 white = colorz['white']
 reset = '\033[0m'
@@ -29,7 +27,22 @@ def ranproxy():
         return None
     return random.choice(proxies)
 
+def is_protected(host):
+    try:
+        url = f"http://{host}"
+        response = requests.get(url, timeout=5)
+        gangster = response.text.lower()
 
+        if "cloudflare" in gangster:
+            return "Cloudflare"
+        elif "tcpshield" in gangster:
+            return "TCPShield"
+        elif "neoprotect" in gangster:
+            return "NeoProtect"
+
+    except Exception :
+        return '0'
+    
 # Checks if this is the first time that the user loaded banana
 def firstload():
 
