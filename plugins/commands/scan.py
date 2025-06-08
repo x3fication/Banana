@@ -46,7 +46,7 @@ def mcscan2(server, ports, online_filter, maximum_ping ,save=False, file=None, v
 def wow(ip12xxx):
     parts = ip12xxx.split('.')
     if len(parts) != 4: return [ip12xxx]
-    
+
     ranges = []
     for part in parts:
         if part == '*': ranges.append(range(1, 256))
