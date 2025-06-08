@@ -4,21 +4,24 @@ import threading
 import socket
 import string
 
-def chico2(server, save, file):
+def chico2(server, save, online_filter, maximum_ping, file, version_filter):
     try:
         lookup = JavaServer.lookup(server)
         status = lookup.status()
-        # logging.success(f"{yellow}({white}{server}{yellow})({white}{status.players.online}/{status.players.max}{yellow})({white}{round(status.latency)}ms{yellow})({white}{status.version.name}{yellow})({white}{status.version.protocol}{yellow})")
+        if status.players.online < online_filter or round(status.latency) > maximum_ping: return
+        if version_filter is not None and status.version.name != version_filter: return
         if save:
-            with open(fr'./output/banana.txt' if file == None else fr'./output/{str(file).split('.')[0]}-travel.txt', 'a+', encoding='UTF-8') as f:
+            with open(fr'./output/banana.txt' if file is None else fr'./output/{str(file).split('.')[0]}-travel.txt', 'a+', encoding='UTF-8') as f:
                 servers = f.readlines()
-                if server not in servers: f.write(f'({server})({status.players.online}/{status.players.max})({round(status.latency)}ms)({status.version.name})({status.version.protocol})\n')
+                if server not in servers:
+                    if version_filter == None: f.write(f'({server})({status.players.online}/{status.players.max})({round(status.latency)}ms)({status.version.name})({status.version.protocol})\n')
+                    elif version_filter == status.version.name: f.write(f'({server})({status.players.online}/{status.players.max})({round(status.latency)}ms)({status.version.name})({status.version.protocol})\n')
 
     except TimeoutError: pass
-    except Exception: pass
+    except Exception as e: pass
 
 
-def mcscan2(server, ports, mthreads, save=False, file=None):
+def mcscan2(server, ports, online_filter, maximum_ping ,save=False, file=None, version_filter=None):
     if not checkserver(server): logging.error('Please input a real domain or server'); return
 
     if '-' in ports: start, end = map(int, ports.split('-'))
@@ -31,10 +34,8 @@ def mcscan2(server, ports, mthreads, save=False, file=None):
 
     for srv in servers:
         for port in range(start, end + 1):
-            while threading.active_count() > int(mthreads):
-                pass
             serverz = f'{srv}:{port}'
-            t = threading.Thread(target=chico2, args=(serverz, save, file), daemon=True)
+            t = threading.Thread(target=chico2, args=(serverz, save, online_filter, maximum_ping, file, version_filter), daemon=True)
             t.start()
             threads.append(t)
 

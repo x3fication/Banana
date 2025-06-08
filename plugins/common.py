@@ -9,7 +9,7 @@ from plugins.logging import *
 from plugins.theme import theme
 from colorama import Fore, Style
 
-prots = ["TCPShield", 'NeoProtect', 'Cloudflare']
+prots = ["TCPShield", 'NeoProtect', 'Cloudflare', "craftserve.pl"]
 colorz = theme()
 white = colorz['white']
 reset = '\033[0m'
@@ -30,18 +30,28 @@ def ranproxy():
 def is_protected(host):
     try:
         url = f"http://{host}"
-        response = requests.get(url, timeout=5)
+        response = requests.get(url, timeout=5, allow_redirects=False)
         gangster = response.text.lower()
+        if 300 <= response.status_code < 400:
+            location = response.headers.get("Location")
+            if location:
+                if "tcpshield" in location: return "TCPShield"
+                elif "craftserve.pl" in location: return "craftserve.pl"
+                elif "neoprotect" in location: return "NeoProtect"
 
         if "cloudflare" in gangster:
             return "Cloudflare"
+        
         elif "tcpshield" in gangster:
             return "TCPShield"
+        elif "craftserve.pl" in gangster:
+            return "craftserve.pl"
         elif "neoprotect" in gangster:
             return "NeoProtect"
+        else: return 'Safe'
 
-    except Exception :
-        return '0'
+    except Exception as e:
+        return 'Safe'
     
 # Checks if this is the first time that the user loaded banana
 def firstload():
