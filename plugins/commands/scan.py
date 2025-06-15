@@ -11,7 +11,8 @@ def chico2(server, save, online_filter, maximum_ping, file, version_filter):
         if status.players.online < online_filter or round(status.latency) > maximum_ping: return
         if version_filter is not None and status.version.name != version_filter: return
         if save:
-            with open(fr'./output/banana.txt' if file is None else fr'./output/{str(file).split('.')[0]}-travel.txt', 'a+', encoding='UTF-8') as f:
+            outputfile = './output/banana.txt' if file is None else f'./output/{str(file).split('.')[0]}-travel.txt'
+            with open(outputfile, 'a+', encoding='UTF-8') as f:
                 servers = f.readlines()
                 if server not in servers:
                     if version_filter == None: f.write(f'({server})({status.players.online}/{status.players.max})({round(status.latency)}ms)({status.version.name})({status.version.protocol})\n')

@@ -5,7 +5,7 @@ import string
 def proxy(ip, mode):
     try:
         if mode not in ['modern', 'none', 'bungeeguard', 'legacy']: logging.info('Modes: none, legacy, bungeeguard, modern'); return
-        p = "proxy/velocity"
+        p = "./proxy/velocity"
         secret = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(43))
         with open(f"{p}/forwarding.secret", "w", encoding="utf-8") as f:
             f.write(secret)

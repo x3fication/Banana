@@ -16,4 +16,4 @@ def puuid(user):
 
         except Exception:
             offline_uuid = str(uuid.UUID(bytes=hashlib.md5(bytes(f'OfflinePlayer:{user}', 'utf-8')).digest()[:16], version=3))
-            print(f'Offline: {offline_uuid}')
+            print(f'{yellow}[{white}Offline{yellow}]{white} {offline_uuid}')

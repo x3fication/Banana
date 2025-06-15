@@ -4,7 +4,7 @@ import string
 
 def bungee(ip, forwarding):
     try:
-        p = "proxy/velocity"
+        p = "./proxy/velocity"
         with open(f"{p}/forwarding.secret", "w") as f:
             f.write(forwarding)
         if not checkserver(ip): logging.error('Please input a real domain or server'); return

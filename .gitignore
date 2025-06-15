@@ -168,3 +168,4 @@ package.json
 /node_modules
 proxies.txt
 config.json
+command.txt
