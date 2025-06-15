@@ -20,7 +20,7 @@ def node():
         os.system('winget install OpenJS.NodeJS')
         time.sleep(2)
         logging.info('Installing mineflayer, express')
-        subprocess.run(fr'"C:\Program Files/nodejs/npm.cmd" install mineflayer express', shell=True)
+        subprocess.run(fr'"C:\Program Files/nodejs/npm.cmd" install mineflayer express socks', shell=True)
 
 
     elif os.name == 'posix':
@@ -30,20 +30,20 @@ def node():
             os.system('sudo apt install nodejs npm')
             os.system('node -v')
             os.system('npm -v')
-            os.system('npm install mineflayer express')
+            os.system('npm install mineflayer express socks')
 
         if pm == 2:
             os.system('sudo dnf update')
             os.system('sudo dnf install nodejs npm')
             os.system('node -v')
             os.system('npm -v')
-            os.system('npm install mineflayer express')
+            os.system('npm install mineflayer express socks')
 
         if pm == 3:
             os.system('sudo pacman -S nodejs npm')
             os.system('node -v')
             os.system('npm -v')
-            os.system('npm install mineflayer express')
+            os.system('npm install mineflayer express socks')
 
 def velocity():
     logging.info('Downloading Velocity [PaperMC]')
