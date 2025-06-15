@@ -8,4 +8,4 @@ def target(domain):
     results = r.text.strip().split('\n')
     for result in results:
         ohio = result.split(',')
-        logging.success(f'{white}{ohio[0].ljust(50)} {yellow}{white}{ohio[1]}{yellow}')
+        logging.success(f'{white}{ohio[0].ljust(50)} {yellow}{white}{ohio[1]}{yellow} ({is_protected(ohio[1])})')

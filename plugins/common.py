@@ -38,20 +38,19 @@ def is_protected(host):
                 if "tcpshield" in location: return "TCPShield"
                 elif "craftserve.pl" in location: return "craftserve.pl"
                 elif "neoprotect" in location: return "NeoProtect"
-
+        
         if "cloudflare" in gangster:
             return "Cloudflare"
-        
         elif "tcpshield" in gangster:
             return "TCPShield"
         elif "craftserve.pl" in gangster:
             return "craftserve.pl"
         elif "neoprotect" in gangster:
             return "NeoProtect"
-        else: return 'Safe'
+        else: return 'Unprotected'
 
     except Exception as e:
-        return 'Safe'
+        return 'Unprotected'
     
 # Checks if this is the first time that the user loaded banana
 def firstload():
