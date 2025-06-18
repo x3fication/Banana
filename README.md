@@ -30,30 +30,34 @@ python main.py
 
 ### Commands
 
-| Command     | Arguments                                              | Description                                                                  |
-| ----------- | ------------------------------------------------------ | ---------------------------------------------------------------------------- |
-| `dns`       | `<domain>`                                             | Shows all DNS records of the domain                                          |
-| `uuid`      | `<ign>`                                                | Shows player's UUID                                                          |
-| `scan`      | `<ip> <range> <threads>`                               | Scans for online Minecraft servers in a given IP range                       |
-| `kick`      | `<username> <server>`                                  | Kicks a player from the server (if cracked)                                  |
-| `rcon`      | `<server> <password>`                                  | Connects to a server's RCON                                                  |
-| `fuzz`      | `<website> <file> <threads>`                           | URL fuzzing: e.g., `example.com/FUZZ` or `FUZZ.example.com`                  |
-| `exit`      | N/A                                                    | Exits this fuckass app                                                       |
-| `proxy`     | `<ip> <mode>`                                          | Starts a local Velocity proxy server that redirects to the specified server  |
-| `check`     | `<file>`                                               | Checks the status of Minecraft servers listed in a specified text file       |
-| `clear`     | N/A                                                    | Clears the screen                                                            |
-| `ogmur`     | `<users_file> <server> <commands_file> <stay_logged>`  | Sends a bot that will execute a list of commands from a file                 |
-| `shell`     | `<host> <port> <bind_port>`                            | Uses netcat to listen to a port                                              |
-| `server`    | `<address>`                                            | Shows information about the server                                           |
-| `ipinfo`    | `<ip>`                                                 | Shows information about the given IP                                         |
-| `target`    | `<domain>`                                             | Shows all subdomains with their resolved IPs                                 |
-| `update`    | N/A                                                    | Re-initializes Banana                                                        |
-| `monitor`   | `<ip>`                                                 | Monitors who leaves and joins on a specified server (if queries are enabled) |
-| `connect`   | `<username> <server>`                                  | Joins with a bot and allows you to send messages                             |
-| `sendcmd`   | `<username> <server> <commands_file>`                  | Sends a bot that executes commands from a file                               |
-| `brutrcon`  | `<server> <file>`                                      | Attempts to brute-force RCON using a password file                           |
-| `fakeproxy` | `<ip> <mode>`                                          | Starts a Velocity proxy server that logs all commands sent to the server     |
-| `example`   | `<name>`                                               | Example command for demonstration purposes                                   |
+| Command       | Arguments                                                     | Description                                                     |
+| ------------- | ------------------------------------------------------------- | --------------------------------------------------------------- |
+| `websearch`   | N/A                                                           | Opens the web search utility                                    |
+| `server`      | `<address>`                                                   | Shows information about the server                              |
+| `edit`        | `<key> <value>`                                               | Edits the banana config                                         |
+| `bungeeguard` | `<ip> <bungeeguard_token>`                                    | Makes a BungeeGuard proxy                                       |
+| `uuid`        | `<ign>`                                                       | Shows player's UUID                                             |
+| `ipinfo`      | `<ip>`                                                        | Shows information about the given IP                            |
+| `fetch`       | `<type>`                                                      | Scrapes proxies of a given type                                 |
+| `monitor`     | `<ip>`                                                        | Monitors who leaves and joins a server (requires query support) |
+| `dns`         | `<domain>`                                                    | Shows all DNS records of the domain                             |
+| `target`      | `<domain>`                                                    | Shows all subdomains with their resolved IPs                    |
+| `proxy`       | `<ip> <mode>`                                                 | Starts a Velocity proxy redirecting to the server               |
+| `fakeproxy`   | `<ip> <mode>`                                                 | Starts a Velocity proxy that logs all commands                  |
+| `check`       | `<file>`                                                      | Checks the status of servers listed in a file                   |
+| `mcscan`      | `<ip> <range> <threads>`                                      | Scans a range of ports on a given IP for Minecraft servers      |
+| `scan`        | `<ip> <range> <threads>`                                      | Performs multi-threaded TCP port scan on a given IP             |
+| `clear`       | N/A                                                           | Clears the screen                                               |
+| `ogmur`       | `<users_file> <server> <commands_file> <stay_logged> <proxy>` | Sends a bot to execute commands from a file                     |
+| `update`      | N/A                                                           | Re-initializes Banana                                           |
+| `kick`        | `<username> <server> <proxy>`                                 | Kicks a player from the server (if cracked)                     |
+| `shell`       | `<host> <port> <bind_port>`                                   | Uses netcat to listen on a port                                 |
+| `connect`     | `<username> <server> <proxy>`                                 | Joins with a bot and allows messaging                           |
+| `rcon`        | `<server> <password>`                                         | Connects to a server’s RCON                                     |
+| `brutrcon`    | `<server> <file>`                                             | Tries passwords from file to brute-force RCON                   |
+| `fuzz`        | `<website> <file> <threads>`                                  | URL fuzzing (e.g., `example.com/FUZZ` or `FUZZ.example.com`)    |
+| `sendcmd`     | `<username> <server> <commands_file> <proxy>`                 | Sends a bot that executes commands from a file                  |
+| `exit`        | N/A                                                           | Exits the app                                                   |
 
 > More commands coming soon!
 
