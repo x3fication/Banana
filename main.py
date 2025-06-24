@@ -26,6 +26,7 @@ from plugins.commands.fetch import fetch
 from plugins.commands.edit import edit
 from plugins.commands.bungeeguard import bungee
 from plugins.commands.websearch import web
+from plugins.commands.pterodactyl import ptero
 
 scripts = {}
 
@@ -41,6 +42,7 @@ def getcmds(): # ts to dynamically update language like mr. ray wanted..
         'server':   (server, 1, 0, getstring('serverh')),
         'edit':     (edit, 1, 1, getstring('edith')),
         'bungeeguard':(bungee, 2, 0, "Usage: bungeeguard <ip> <bungeeguard_token>\nMakes a bungeeguard proxy"),
+        'ptero':     (ptero, 1, 0, "Usage: ptero <panel_link>\nUses a funny bug to make an account on vuln pterodactyl panels"),
         'uuid':     (puuid, 1, 0, getstring('uuidh')),
         'ipinfo':   (ipinfo, 1, 0, getstring('ipinfoh')),
         'fetch':    (fetch, 1, 0, getstring('fetchh')),
