@@ -4,6 +4,7 @@ import logging
 import warnings
 import urllib3
 import requests
+import uuid
 from requests.exceptions import RequestException
 from plugins.common import *
 import string
