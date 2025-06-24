@@ -9,3 +9,4 @@ pyperclip
 PySocks
 keyboard
 mysql-connector-python
+bcrypt
