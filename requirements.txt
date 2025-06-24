@@ -8,3 +8,4 @@ toml
 pyperclip
 PySocks
 keyboard
+mysql-connector-python
