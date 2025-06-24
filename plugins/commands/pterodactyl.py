@@ -8,7 +8,6 @@ import uuid
 from requests.exceptions import RequestException
 from plugins.common import *
 import string
-import uuid
 
 def exploit(target_url):
     warnings.filterwarnings("ignore", category=UserWarning)
