@@ -4,17 +4,23 @@ import socket
 
 def server(server):
     try:
-        if checkserver(server) == False: logging.error('Please input a real domain or server'); return
+        if not checkserver(server):
+            logging.error('Please input a real domain or server')
+            return
+
         lookup = JavaServer.lookup(server, timeout=5)
         status = lookup.status()
         ip = lookup.address.resolve_ip()
-    
-        print(f"""{yellow}[{white}IP{yellow}]{white} {ip} {yellow}({is_protected(ip)})
-{yellow}[{white}MOTD{yellow}]{white} {status.motd.to_ansi()}
-{yellow}[{white}Version{yellow}]{white} {status.version.name}
-{yellow}[{white}Protocol{yellow}]{white} {status.version.protocol}
-{yellow}[{white}Players{yellow}]{white} {status.players.online}/{status.players.max}
-{yellow}[{white}Ping{yellow}]{white} {round(status.latency)}ms""")
-    
+
+        print(f"\n{gray}[{yellow}#{gray}] {white}Checking {yellow}{server}{white} via {gray}mcstatus{white}...\n")
+        print(f"{white}• {yellow}IP:{white} {ip} {yellow}({is_protected(ip)})")
+        print(f"{white}• {yellow}MOTD:{white}")
+        motd = status.motd.to_ansi().splitlines()
+        for line in motd:
+            print(f"  {gray}•{white} {line}")
+        print(f"{white}• {yellow}Version:{white} {status.version.name}")
+        print(f"{white}• {yellow}Protocol:{white} {status.version.protocol}")
+        print(f"{white}• {yellow}Players:{white} {status.players.online}/{status.players.max}")
+        print(f"{white}• {yellow}Ping:{white} {round(status.latency)}ms\n")
 
     except TimeoutError: logging.info('Server is offline')
