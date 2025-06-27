@@ -2,23 +2,29 @@ import dns.resolver
 from plugins.common import *
 
 def lookup(domain):
-    if checkserver(domain):
-        records = ['A', 'AAAA', 'MX', 'NS', 'CNAME', 'TXT']
-        for record in records:
-            try:
-                results = [r.to_text() for r in dns.resolver.resolve(domain, record)]
-                print(f"{yellow}[{white}{record}{yellow}]{white}")
-                if results: [print(f"  - {r}") for r in results]
-                else: print(f"{yellow}[{white}{record}{yellow}]{white} No records found")
+    if not checkserver(domain):
+        logging.error(f"{red}Please enter a valid domain{white}")
+        return
 
-            except (dns.resolver.NoAnswer, dns.resolver.NoNameservers):
-                print(f"{yellow}[{white}{record}{yellow}]{white} No records found")
+    print(f"\n{gray}[{yellow}#{gray}] {white}Checking DNS records for {yellow}{domain}{white}...")
 
-            except dns.resolver.NXDOMAIN:
-                logging.error("Domain does not exist")
-                return
-            
-            except Exception as e:
-                logging.error(e)
+    records = ['A', 'AAAA', 'MX', 'NS', 'CNAME', 'TXT']
+    for record in records:
+        try:
+            results = [r.to_text() for r in dns.resolver.resolve(domain, record)]
+            print(f"{white}\n• {yellow}[{record}]:{white}")
+            if results:
+                for r in results:
+                    print(f"{gray}•{white} {r}")
+            else:
+                print(f"{gray}•{red}No records found")
+        except (dns.resolver.NoAnswer, dns.resolver.NoNameservers):
+            print(f"\n{white}• {yellow}[{record}]:{white}")
+            print(f"{gray}• No records found")
+        except dns.resolver.NXDOMAIN:
+            logging.error(f"{red}Domain does not exist{white}")
+            return
+        except Exception as e:
+            logging.error(f"{red}Error: {e}{white}")
 
-    else: logging.error('Please enter a valid domain')
+    print()

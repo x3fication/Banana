@@ -47,23 +47,25 @@ def node():
 
 def velocity():
     logging.info('Downloading Velocity [PaperMC]')
-    download = requests.get(f"https://mineacademy.org/api/velocity/latest")
-    os.makedirs('./proxy/velocity/', exist_ok=True)
-    with open('./proxy/velocity/velocity.jar', 'wb') as f:
-        f.write(download.content)
-    logging.success(f'Done downloading velocity.jar')
-    logging.info('Setting up FakeProxy')
-    os.makedirs('./proxy/fakeproxy/', exist_ok=True)
-    fp = requests.get(f"https://github.com/Renovsk/Plantain/releases/download/fp-1/plantain-fakeproxy-1.0.jar")
-    with open('./proxy/fakeproxy/velocity.jar', 'wb') as f:
-        f.write(download.content)
 
+    r = requests.get("https://api.papermc.io/v2/projects/velocity").json()
+    v, b = r["versions"][-1], requests.get(f"https://api.papermc.io/v2/projects/velocity/versions/{r['versions'][-1]}").json()["builds"][-1]
+    url = f"https://api.papermc.io/v2/projects/velocity/versions/{v}/builds/{b}/downloads/velocity-{v}-{b}.jar"
+    jar = requests.get(url).content
+
+    os.makedirs('./proxy/velocity/', exist_ok=True)
+    with open('./proxy/velocity/velocity.jar', 'wb') as f: f.write(jar)
+    logging.success(f'Done downloading velocity-{v}-{b}.jar')
+
+    logging.info('Setting up FakeProxy')
     os.makedirs('./proxy/fakeproxy/plugins/', exist_ok=True)
-    with open('./proxy/fakeproxy/plugins/plantain-fakeproxy-1.0.jar', 'wb') as f:
-        f.write(fp.content)
+
+    with open('./proxy/fakeproxy/velocity.jar', 'wb') as f: f.write(jar)
+    fp = requests.get("https://github.com/Renovsk/Plantain/releases/download/fp-1/plantain-fakeproxy-1.0.jar").content
+    with open('./proxy/fakeproxy/plugins/plantain-fakeproxy-1.0.jar', 'wb') as f: f.write(fp)
+
     logging.success('Done downloading plantain-fakeproxy-1.0.jar')
     time.sleep(1)
-
 def upd(): # this is prob retarded way to do it ik
     node()
     velocity()

@@ -2,10 +2,16 @@ import requests
 from plugins.common import *
 
 def target(domain):
-    if checkserver(domain) == False: logging.error('Please input a real domain'); return
+    if not checkserver(domain): logging.error('Please input a real domain'); return
 
     r = requests.get(f'https://api.hackertarget.com/hostsearch/?q={domain}')
     results = r.text.strip().split('\n')
+    iplen = max(len(x.split(',')[1]) for x in results) + 1
+    domlen = max(len(x.split(',')[0]) for x in results) + 1
+
+    print(f"\n{gray}[{yellow}#{gray}] {white}Checking {yellow}{domain}{white} via {gray}hackertarget.com{white}...\n")
+    print(f"{white}• {yellow}Hosts found:{white}")
     for result in results:
-        ohio = result.split(',')
-        logging.success(f'{white}{ohio[0].ljust(50)} {yellow}{white}{ohio[1]}{yellow} ({is_protected(ohio[1])})')
+        dom, ip = result.split(',')
+        print(f"  {gray}•{white} {ip.ljust(iplen)}  {dom.ljust(domlen)}  {yellow}({is_protected(ip)})")
+    print('\n')

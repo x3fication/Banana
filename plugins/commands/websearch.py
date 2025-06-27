@@ -3,6 +3,7 @@ import mcstatus
 import requests
 import string
 import socket
+import threading
 from plugins.common import *
 from plugins.commands.scan import mcscan2
 
@@ -22,12 +23,15 @@ def serverdata(server):
 def checks(server, online_filter, maximum_ping, save, filename, version_filter):
     try:
         online, max_players, ping, motd, version = serverdata(server)
-        if online < online_filter or ping > maximum_ping: return
-        if version_filter is not None and version != version_filter: return
+        if online < online_filter or ping > maximum_ping:
+            return
+        if version_filter is not None and version != version_filter:
+            return
         with lock:
-            if server in found: return
+            if server in found:
+                return
             found.append(server)
-            print(f"\rFound {len(found)} servers matching your filter.", end="", flush=True)
+            print(f"\r{gray}[{yellow}!{gray}] {white}Found {yellow}{len(found)} {white}servers matching your filter.", end="", flush=True)
 
         if save == 'y':
             clean_motd = motd.replace("\n", "").replace("\r", "")
@@ -41,7 +45,6 @@ def checks(server, online_filter, maximum_ping, save, filename, version_filter):
     except Exception:
         pass
 
-
 def scrape_page(page, online_filter, maximum_ping, save='y', filename='rizz.txt', version_filter=None, protected_filter='y'):
     try:
         listing = requests.get(f'https://minecraftservers.org/index/{page}').text
@@ -50,74 +53,91 @@ def scrape_page(page, online_filter, maximum_ping, save='y', filename='rizz.txt'
         for server in servers:
             try:
                 if protected_filter == 'y':
-                    protected = is_protected(socket.gethostbyname(server if not ':' in server else server.split(':')[0]))
+                    ip = socket.gethostbyname(server if ':' not in server else server.split(':')[0])
+                    protected = is_protected(ip)
                     if protected not in prots:
                         t = threading.Thread(target=checks, args=(server, online_filter, maximum_ping, save, filename, version_filter), daemon=True)
                         t.start()
                         threads.append(t)
-                if protected_filter == 'n':
+                elif protected_filter == 'n':
                     t = threading.Thread(target=checks, args=(server, online_filter, maximum_ping, save, filename, version_filter), daemon=True)
                     t.start()
                     threads.append(t)
-            except Exception as e:
-                # print(e)
+            except Exception:
                 pass
 
         for t in threads:
             t.join()
 
-    except Exception as e:
-        # print(e)
+    except Exception:
         pass
 
-
 def web():
-    online_filter = int(input(f'{yellow}Minimum Online ({white}int{yellow})> '))
-    maximum_ping = int(input(f'{yellow}Maximum Ping ({white}int{yellow})> '))
+    try:
+        online_filter = int(input(f'{yellow}Minimum Online ({white}int{yellow})> {white}'))
+        maximum_ping = int(input(f'{yellow}Maximum Ping ({white}int{yellow})> {white}'))
 
-    protected_filter = input(f'{yellow}Filter Protected ({white}Ex: TCPShield{yellow}) ({white}y/n{yellow})> ')
-    if protected_filter not in ['y', 'n']: logging.error('Please enter a valid value for filter protected'); return
+        protected_filter = input(f'{yellow}Filter Protected ({white}Ex: TCPShield{yellow}) ({white}y/n{yellow})> {white}')
+        if protected_filter not in ['y', 'n']:
+            logging.error(f"{red}Please enter a valid value for filter protected{white}")
+            return
 
-    filename = input(f'{yellow}File name? ({white}Ex: servers.txt{yellow})> ')
-    if not str(filename).endswith('.txt'): logging.error('Please enter a valid filename'); return
+        filename = input(f'{yellow}File name? ({white}Ex: servers.txt{yellow})> {white}')
+        if not str(filename).endswith('.txt'):
+            logging.error(f"{red}Please enter a valid filename{white}")
+            return
 
-    travel = input(f"{yellow}Travel ({white}y/n{yellow})> ")
-    if travel not in ['y', 'n']: logging.error('Please enter a valid value for travel'); return
+        travel = input(f"{yellow}Travel ({white}y/n{yellow})> {white}")
+        if travel not in ['y', 'n']:
+            logging.error(f"{red}Please enter a valid value for travel{white}")
+            return
 
-    if travel == 'y':
-        portrange = input(f"{yellow}Port Range? ({white}Ex: 25000-35590 or 25565{yellow})> ")
-        if '-' in portrange: start, end = map(int, portrange.split('-'))
-        else: start = end = int(portrange)
-        if start < 1 or end > 65535: logging.error('Please enter a valid range'); return
-        if start > end: logging.error('Start port has to be <= end port'); return
+        if travel == 'y':
+            portrange = input(f"{yellow}Port Range? ({white}Ex: 25000-35590 or 25565{yellow})> {white}")
+            if '-' in portrange:
+                start, end = map(int, portrange.split('-'))
+            else:
+                start = end = int(portrange)
+            if start < 1 or end > 65535:
+                logging.error(f"{red}Please enter a valid range{white}")
+                return
+            if start > end:
+                logging.error(f"{red}Start port has to be <= end port{white}")
+                return
 
-    dofilterver = input(f"{yellow}Filter Version ({white}y/n{yellow})> ")
-    if dofilterver not in ['y', 'n']: logging.error('Please enter a valid value for Filter Version'); return
+        dofilterver = input(f"{yellow}Filter Version ({white}y/n{yellow})> {white}")
+        if dofilterver not in ['y', 'n']:
+            logging.error(f"{red}Please enter a valid value for Filter Version{white}")
+            return
 
-    version_filter = input(f"{yellow}Version? ({white}Ex: BungeeCord 1.8.x-1.21.x{yellow})> ") if dofilterver == 'y' else None
+        version_filter = input(f"{yellow}Version? ({white}Ex: BungeeCord 1.8.x-1.21.x{yellow})> {white}") if dofilterver == 'y' else None
 
-    maxpage = getrange()
-    logging.info(f'Scraping thru {maxpage} indexes')
+        maxpage = getrange()
+        print(f"{gray}[{yellow}#{gray}] {white}Scraping thru {yellow}{maxpage} {white}indexes")
 
-    scrapingering = []
-    for i in range(1, maxpage):
-        t = threading.Thread(target=scrape_page, args=(i, online_filter, maximum_ping, 'y', filename, version_filter, protected_filter), daemon=True)
-        t.start()
-        scrapingering.append(t)
+        scrapingering = []
+        for i in range(1, maxpage):
+            t = threading.Thread(target=scrape_page, args=(i, online_filter, maximum_ping, 'y', filename, version_filter, protected_filter), daemon=True)
+            t.start()
+            scrapingering.append(t)
 
-    for t in scrapingering:
-        t.join()
-
-    if travel == 'y':
-        travellingering = []
-        print(f'')
-        print(f'Travelling thru {len(found)} hosts')
-        for s in found:
-            try:
-                ip = socket.gethostbyname(s if not ':' in s else s.split(':')[0])
-                t = threading.Thread(target=mcscan2, args=(ip, portrange, online_filter, maximum_ping, True, filename, version_filter), daemon=True)
-                t.start()
-                travellingering.append(t)
-            except Exception as e: pass
-        for t in travellingering:
+        for t in scrapingering:
             t.join()
+
+        if travel == 'y':
+            travellingering = []
+            print()
+            print(f"{gray}[{yellow}#{gray}] {white}Travelling thru {yellow}{len(found)} {white}hosts")
+            for s in found:
+                try:
+                    ip = socket.gethostbyname(s if ':' not in s else s.split(':')[0])
+                    t = threading.Thread(target=mcscan2, args=(ip, portrange, online_filter, maximum_ping, True, filename, version_filter), daemon=True)
+                    t.start()
+                    travellingering.append(t)
+                except Exception:
+                    pass
+            for t in travellingering:
+                t.join()
+
+    except Exception as e:
+        logging.error(f"{red}Error: {e}{white}")

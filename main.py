@@ -38,7 +38,7 @@ scripts = {}
 
 def getcmds(): # ts to dynamically update language like mr. ray wanted..
     return {
-        'websearch':(web, 0, 0, "ohio"),
+        'websearch':(web, 0, 0, "Checks minecraft server lists and \"scans\" thru them to find even more servers"),
         'server':   (server, 1, 0, getstring('serverh')),
         'edit':     (edit, 1, 1, getstring('edith')),
         'bungeeguard':(bungee, 2, 0, "Usage: bungeeguard <ip> <bungeeguard_token>\nMakes a bungeeguard proxy"),
@@ -69,23 +69,38 @@ def getcmds(): # ts to dynamically update language like mr. ray wanted..
 
 def chelp(command=None):
     commands = getcmds()
-    if command is None:
-        print(f"{yellow}┌{white} Available Commands{yellow}")
-        max_len = max(len(cmd) for cmd in commands.keys())
 
-        for cmd, entry in sorted(commands.items(), key=lambda x: len(x[0])):
-            if len(entry) == 3: func, args, msg = entry
-            else: func, args, opt_args, msg = entry
-            print(f"{yellow}├ {white}{cmd.ljust(max_len)} {white}- {msg.splitlines()[0].replace('Usage: ', '')}")
+    if command is None:
+        entries = []
+        for cmd, entry in sorted(commands.items()):
+            msg = entry[2] if len(entry) == 3 else entry[3]
+            lines = msg.strip().splitlines()
+            desc = lines[1] if len(lines) > 1 else lines[0]
+            entries.append((cmd, desc))
+
+        maxcmd = max(len(cmd) for cmd, _ in entries)
+        desclen = max(len(desc) for _, desc in entries)
+        width = maxcmd + desclen + 7
+
+        print(f"{white}{' Available Commands '.center(width)}")
+        print(f"{gray}┌{'─' * (maxcmd + 2)}┬{'─' * (desclen + 2)}┐")
+        print(f"{gray}│ {yellow}{'Command'.ljust(maxcmd)} {gray}│ {white}{'Description'.ljust(desclen)} {gray}│")
+        print(f"{gray}├{'─' * (maxcmd + 2)}┼{'─' * (desclen + 2)}┤")
+
+        for cmd, desc in entries:
+            print(f"{gray}│ {yellow}{cmd.ljust(maxcmd)} {gray}│ {white}{desc.ljust(desclen)} {gray}│")
+
+        print(f"{gray}└{'─' * (maxcmd + 2)}┴{'─' * (desclen + 2)}┘\n")
 
     elif command in commands:
-        entry = commands[command]
-        if len(entry) == 3: _, _, msg = entry
-        else: _, _, _, msg = entry
+        msg = commands[command][2] if len(commands[command]) == 3 else commands[command][3]
         print(msg)
 
-    elif command in scripts: print(scripts[command]['usage'])
-    else: print(f'Unknown Command')
+    elif command in scripts:
+        print(scripts[command]['usage'])
+
+    else:
+        print('Unknown command')
 
 def loadscripts(folder='scripts'):
     if not os.path.exists(folder): return
@@ -109,6 +124,7 @@ def api():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         stdin=subprocess.DEVNULL,
+        shell=True
     )
 
 def execmd(cmd):

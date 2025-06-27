@@ -6,6 +6,7 @@ white = colorz['white']
 yellow = colorz['yellow']
 red = colorz['red']
 green = colorz['green']
+gray = '\033[90m'
 
 from datetime import datetime
 
