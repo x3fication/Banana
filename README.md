@@ -7,7 +7,7 @@
 
 **A free and better alternative to MCPTool**
 
-<h1 align="center>
+<h1 align="center">
   <img src="https://files.catbox.moe/i77zrj.png" alt="Header Image" style="width:80%; max-width:600px;"/>
 </h1>
 
