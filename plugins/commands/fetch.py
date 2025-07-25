@@ -13,6 +13,8 @@ nigga = {
     'socks4': socks.SOCKS4,
 }
 
+sem = threading.Semaphore(50)
+
 def checkproxy(proxy: str):
     global check
     try:
@@ -45,6 +47,7 @@ def fetch(ptype):
         t = threading.Thread(target=checkproxy, args=(proxy,), daemon=True)
         t.start()
         threads.append(t)
+        time.sleep(0.06)
 
     for t in threads: t.join()
     with open('proxies.txt', 'a+') as f:

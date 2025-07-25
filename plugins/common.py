@@ -5,9 +5,12 @@ import time
 import random
 import requests
 import threading
+from bs4 import BeautifulSoup
 from plugins.logging import *
 from plugins.theme import theme
 from colorama import Fore, Style
+import time
+import sys
 
 prots = ["TCPShield", 'NeoProtect', 'Cloudflare', "craftserve.pl"]
 colorz = theme()
@@ -17,8 +20,10 @@ yellow = colorz['yellow']
 red = colorz['red']
 green = colorz['green']
 underline = '\033[4m'
+hide = "\033[?25l"
+show = "\033[?25h"
 
-clear = lambda: loadmenu(); print("\033c", end="")
+VERSION = "v0.6"
 
 def ranproxy():
     with open('proxies.txt', 'r') as f:
@@ -121,18 +126,29 @@ def getstring(key):
     return strings.get(key, f"[Missing string for '{key}']")
 
 def animate():
-    print("\033c", end="")
-    print(rf"""
-{yellow}      ___                          
-     / _ )___ ____  ___ ____  ___ _
-    / _  / _ `/ _ \/ _ `/ _ \/ _ `/
-   /____/\_,_/_//_/\_,_/_//_/\_,_/ {white}""")
+    art = [
+        "\n                  ___",
+        r"                 / _ )___ ____  ___ ____  ___ _",
+        r"                / _  / _ `/ _ \/ _ `/ _ \/ _ `/",
+        r"               /____/\_,_/_//_/\_,_/_//_/\_,_/ "
+    ]
 
-    for i in range(19):
-        line = "─" * i
-        space = " " * (19 - i)
-        print("\r" + space + line * 2, end="", flush=True)
-        time.sleep(0.03)
+    w = max(len(line) for line in art)
+    shine = 5
+    delay = 0.008
+
+    print(hide, end="")
+    try:
+        for p in range(-shine, w + shine):
+            print("\033[H", end="")
+            for line in art:
+                s = ""
+                for i, c in enumerate(line):
+                    s += white + c if p <= i < p + shine else yellow + c
+                print(s + reset)
+            time.sleep(delay)
+    finally:
+        print(show, end="")
     
 def scrapeproxy(ptype):
     if ptype.lower() not in ['socks5', 'socks4']: logging.error('Please enter a valid proxy type (socks5, socks4)'); return
@@ -159,15 +175,37 @@ r"""         _
 
 def loadmenu():
     print("\033c", end="")
-    print(rf'''
-{yellow}      ___                          
-     / _ )___ ____  ___ ____  ___ _        
-    / _  / _ `/ _ \/ _ `/ _ \/ _ `/        
-   /____/\_,_/_//_/\_,_/_//_/\_,_/ {white} 
-┣────────────────────────────────────┫
-    {white}Hello {os.getlogin()}. Welcome to {yellow}BANANA{reset}
-    {white}Type {yellow}help{white} to view the commands
+    print(rf'''{yellow}
+                  ___                          
+                 / _ )___ ____  ___ ____  ___ _        
+                / _  / _ `/ _ \/ _ `/ _ \/ _ `/        
+               /____/\_,_/_//_/\_,_/_//_/\_,_/ {white} 
 ''')
+
+import requests
+from datetime import datetime
+
+def repostuff():
+    repo = "https://api.github.com/repos/x3fication/Banana"
+    stars = requests.get(repo).json().get("stargazers_count", 0)
+    updated = requests.get(repo).json().get("updated_at")
+    return stars, updated, VERSION
+
+def stats(stars, updated, version, width=60):
+    if updated:
+        updated = datetime.strptime(updated, "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d %H:%M:%S UTC")
+    else:
+        updated = "N/A"
+
+    def pad(line):
+        visible = re.compile(r'\033\[[0-9;]*m').sub('', line)
+        return f"{line}{' ' * (width - len(visible) - 1)}{gray}]"
+
+    # print(f'''                {white}Hello {os.getlogin()}. Welcome to {yellow}BANANA{reset}
+    #             {white} Type {yellow}help{white} to view commands\n''')
+    print(pad(f"       {gray}*[ {yellow}banana {version}{gray}"))
+    print(pad(f"+ -- --=[ {white}Stars: {stars}"))
+    print(pad(f"{gray}+ -- --=[ {white}Last Updated: {updated}") + '\n')
 
 # Checks if server domain is valid with regex
 def checkserver(server):

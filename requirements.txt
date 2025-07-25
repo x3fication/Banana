@@ -10,3 +10,4 @@ PySocks
 keyboard
 mysql-connector-python
 bcrypt
+beautifulsoup4

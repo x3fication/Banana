@@ -13,6 +13,9 @@
     "mcscanh": "Usage: mcscan <ip> <range> <threads>\nCheck the status of Minecraft servers listed in a specified text file\nExample: scan 0.0.0.0 1-65535 10",
     "scanh": "Usage: scan <ip> <range> <threads>\nPerform a multi-threaded TCP port scan on a given IP address\nExample: scan 0.0.0.0 1-65535 10",
     "clearh": "clears the screen",
+    "bungeeguardh": "Usage: bungeeguard <ip> <bungeeguard_token>\nMakes a bungeeguard proxy",
+    "iphistoryh": "Usage: iphistory <domain>\nChecks the old IPV4 addresses of a domain",
+    "websearchh": "Checks minecraft server lists and \"scans\" thru them to find even more servers",
     "ogmurh": "Usage: ogmur <users_file> <server> <commands_file> <stay_logged> <proxy>\nSends a bot that will execute a list of commands from a file",
     "updateh": "re-initializes banana",
     "kickh": "Usage: kick <username> <server> <proxy>\nKicks a player from the server (if cracked)",
@@ -22,6 +25,7 @@
     "brutrconh": "Usage: brutrcon <server> <file>\nTries the passwords of the file given to try to connect to rcon",
     "fuzzh": "Usage: fuzz <website> <file> <threads>\nExample: example.com/FUZZ or FUZZ.example.com",
     "sendcmdh": "Usage: sendcmd <username> <server> <commands_file> <proxy>\nSends a bot that will execute a list of commands from a file",
+    "pteroh": "Usage: ptero <panel_link>\nUses a funny bug to make an account on vuln pterodactyl panels",
     "exith": "exit this fuckass app",
     "initmsg": "please wait while we setup your environment.",
     "inithello": "Hello"

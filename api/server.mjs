@@ -32,66 +32,58 @@ function parseProxy(proxyUrl) {
   }
 }
 
-app.post('/connect', (req, res) => {
+app.post('/connect', async (req, res) => {
   const { host, port = 25565, username, proxy } = req.body;
   const server = `${host}:${port}`;
-  
   if (botz[server]?.[username]) return res.status(400).json({ error: 'Bot already connected.' });
 
-  let bot;
   try {
+    let customConnect;
     if (proxy) {
       const broxy = parseProxy(proxy);
-      bot = createBot({
-        username,
-        host: host,
-        port: port,
-        auth: 'offline',
-        connect: async (client) => {
-          try {
-            const { socket } = await SocksClient.createConnection({
-              proxy: {
-                host: broxy.host,
-                port: broxy.port,
-                type: broxy.type,
-                username: broxy.userId,
-                password: broxy.password
-              },
-              command: 'connect',
-              destination: { host: host, port: port }
-            });
-            console.log(`[Proxy] Successfully connected to ${broxy.host}:${broxy.port} for ${host}:${port}`);
-            client.setSocket(socket);
-            client.emit('connect');
-          } catch (err) {
-            console.error(`[Proxy Error] ${err.message}`, err.stack);
-            client.emit('error', err);
-            res.status(500).json({ error: `Proxy connection failed: ${err.message}` });
-          }
-        }
-      });
-    } else {
-      bot = createBot({ host, port, username });
+      customConnect = async (client) => {
+        const { socket } = await SocksClient.createConnection({
+          proxy: {
+            host: broxy.host,
+            port: broxy.port,
+            type: broxy.type,
+            username: broxy.userId,
+            password: broxy.password
+          },
+          command: 'connect',
+          destination: { host: host.trim(), port: Number(port) }
+        });
+        console.log(`[Proxy] Connected through ${broxy.host}:${broxy.port}`);
+        client.setSocket(socket);
+        client.emit('connect');
+      };
     }
+
+    const bot = createBot({
+      username,
+      host,
+      port: Number(port),
+      auth: 'offline',
+      connect: customConnect
+    });
+
+    bot.on('login', () => console.log(`[Bot] Logged in as ${username} on ${server}`));
+    bot.on('spawn', () => statuz[server][username].connected = true);
+    bot.on('error', err => console.error(`[Bot] ${err.message}`));
+
+    botz[server] = botz[server] || {};
+    statuz[server] = statuz[server] || {};
+    botz[server][username] = bot;
+    statuz[server][username] = { connected: false, username };
+
+    res.json({ message: 'Bot connecting...', server, username, status: 'connecting' });
+
   } catch (err) {
-    return res.status(500).json({ error: `Failed to create bot: ${err.message}` });
+    console.error(err);
+    res.status(500).json({ error: `Connection failed: ${err.message}` });
   }
-
-  botz[server] = botz[server] || {};
-  statuz[server] = statuz[server] || {};
-  botz[server][username] = bot;
-  statuz[server][username] = { connected: false, username };
-
-  bot.on('login', () => console.log(`[Bot] Logged in as ${username} on ${server}`));
-  bot.on('spawn', () => {
-    console.log(`[Bot] Spawned on ${server}`);
-    statuz[server][username].connected = true;
-  });
-
-  bot.on('error', err => console.log(`[Bot] ${username} @ ${server}: ${err.message}`, err.stack));
-
-  res.json({ message: 'Bot is connecting...', server, username, status: 'connecting' });
 });
+
 
 app.post('/send', (req, res) => {
   const { host, port = 25565, username, message } = req.body;

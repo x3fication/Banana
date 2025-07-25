@@ -27,44 +27,54 @@ from plugins.commands.edit import edit
 from plugins.commands.bungeeguard import bungee
 from plugins.commands.websearch import web
 from plugins.commands.pterodactyl import ptero
+from plugins.commands.iphistory import iphistory
+
 
 scripts = {}
-
 
 """
     if u want to add ur own commands do here is the format
         (func, required_args, optional_args, usage)
 """
 
-def getcmds(): # ts to dynamically update language like mr. ray wanted..
+stars, updated, version = repostuff()
+clear = lambda: loadmenu(); print("\033c", end="")
+
+def flush():
+    print("\033c", end="")
+    loadmenu()
+    stats(stars, updated, version)
+
+def getcmds():
     return {
-        'websearch':(web, 0, 0, "Checks minecraft server lists and \"scans\" thru them to find even more servers"),
-        'server':   (server, 1, 0, getstring('serverh')),
-        'edit':     (edit, 1, 1, getstring('edith')),
-        'bungeeguard':(bungee, 2, 0, "Usage: bungeeguard <ip> <bungeeguard_token>\nMakes a bungeeguard proxy"),
-        'ptero':     (ptero, 1, 0, "Usage: ptero <panel_link>\nUses a funny bug to make an account on vuln pterodactyl panels"),
-        'uuid':     (puuid, 1, 0, getstring('uuidh')),
-        'ipinfo':   (ipinfo, 1, 0, getstring('ipinfoh')),
-        'fetch':    (fetch, 1, 0, getstring('fetchh')),
-        'monitor':  (monitor, 1, 0, getstring('monitorh')),
-        'dns':      (lookup, 1, 0, getstring('dnsh')),
-        'target':   (target, 1, 0, getstring('targeth')),
-        'proxy':    (proxy, 2, 0, getstring('proxyh')),
-        'fakeproxy':(fakeproxy, 2, 0, getstring('fakeproxyh')),
-        'check':    (check, 1, 0, getstring('checkh')),
-        'mcscan':   (mcscan, 3, 0, getstring('mcscanh')),
-        'scan':     (scan, 3, 0, getstring('scanh')),
-        'clear':    (clear, 0, 0, getstring('clearh')),
-        'ogmur':    (ogmur, 4, 1, getstring('ogmurh')),
-        'update':   (upd, 0, 0, getstring('updateh')),
-        'kick':     (kick, 2, 1, getstring('kickh')),
-        'shell':    (shell, 3, 0, getstring('shellh')),
-        'connect':  (connect, 2, 1, getstring('connecth')),
-        'rcon':     (rcon, 2, 0, getstring('rconh')),
-        'brutrcon': (rconbrut, 2, 0, getstring('brutrconh')),
-        'fuzz':     (fuzz, 3, 0, getstring('fuzzh')),
-        'sendcmd':  (sendcmd, 3, 1, getstring('sendcmdh')),
-        'exit':     (exit, 0, 0, getstring('exith'))
+        'iphistory':    (iphistory, 1, 0, getstring('iphistoryh')),
+        'websearch':    (web, 0, 0, getstring('websearchh')),
+        'server':       (server, 1, 0, getstring('serverh')),
+        'edit':         (edit, 1, 1, getstring('edith')),
+        'bungeeguard':  (bungee, 2, 0, getstring('bungeeguardh')),
+        'ptero':        (ptero, 1, 0, getstring('pteroh')),
+        'uuid':         (puuid, 1, 0, getstring('uuidh')),
+        'ipinfo':       (ipinfo, 1, 0, getstring('ipinfoh')),
+        'fetch':        (fetch, 1, 0, getstring('fetchh')),
+        'monitor':      (monitor, 1, 0, getstring('monitorh')),
+        'dns':          (lookup, 1, 0, getstring('dnsh')),
+        'target':       (target, 1, 0, getstring('targeth')),
+        'proxy':        (proxy, 2, 0, getstring('proxyh')),
+        'fakeproxy':    (fakeproxy, 2, 0, getstring('fakeproxyh')),
+        'check':        (check, 1, 0, getstring('checkh')),
+        'mcscan':       (mcscan, 3, 0, getstring('mcscanh')),
+        'scan':         (scan, 3, 0, getstring('scanh')),
+        'clear':        (flush, 0, 0, getstring('clearh')),
+        'ogmur':        (ogmur, 4, 1, getstring('ogmurh')),
+        'update':       (upd, 0, 0, getstring('updateh')),
+        'kick':         (kick, 2, 1, getstring('kickh')),
+        'shell':        (shell, 3, 0, getstring('shellh')),
+        'connect':      (connect, 2, 1, getstring('connecth')),
+        'rcon':         (rcon, 2, 0, getstring('rconh')),
+        'brutrcon':     (rconbrut, 2, 0, getstring('brutrconh')),
+        'fuzz':         (fuzz, 3, 0, getstring('fuzzh')),
+        'sendcmd':      (sendcmd, 3, 1, getstring('sendcmdh')),
+        'exit':         (exit, 0, 0, getstring('exith'))
     }
 
 def chelp(command=None):
@@ -119,7 +129,7 @@ def loadscripts(folder='scripts'):
 
 def api():
     gg = os.path.join(os.getcwd(), "api")
-    subprocess.run(fr'"C:\Program Files/nodejs/node.exe" server.js' if os.name == 'nt' else 'node server.js',
+    subprocess.run(fr'"C:\Program Files/nodejs/node.exe" server.mjs' if os.name == 'nt' else 'node server.mjs',
         cwd=os.path.join(gg),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -168,6 +178,7 @@ if __name__ == '__main__':
     initialize()
     threading.Thread(target=api, daemon=True).start()
     loadscripts()
+    stats(stars, updated, version)
 
     while True:
         try:

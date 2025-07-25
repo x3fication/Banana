@@ -93,5 +93,7 @@ V  \
         animate()
         loadmenu()
 
-    elif firstload() == False: animate(); loadmenu()
+    elif firstload() == False:
+        animate()
+        loadmenu()
     
