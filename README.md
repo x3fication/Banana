@@ -7,6 +7,10 @@
 
 **A free and better alternative to MCPTool**
 
+<h1 align="center">
+  <img src="https://files.catbox.moe/lrn730.png" alt="Header Image" style="width:30%; max-width:600px;"/>
+</h1>
+
 ---
 
 ## 📦 Installation
