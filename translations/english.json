@@ -1,4 +1,5 @@
 {
+    "banana": "Usage: banana",
     "serverh": "Usage: server <address>\nShows information about the server",
     "uuidh": "Usage: uuid <ign>\nShows player's uuid",
     "edith": "Usage: edit <key> <value>\nEdits the banana config",

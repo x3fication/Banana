@@ -28,6 +28,7 @@ from plugins.commands.bungeeguard import bungee
 from plugins.commands.websearch import web
 from plugins.commands.pterodactyl import ptero
 from plugins.commands.iphistory import iphistory
+from plugins.commands.banana import banana
 
 
 scripts = {}
@@ -47,6 +48,7 @@ def flush():
 
 def getcmds():
     return {
+        'banana':       (banana, 0, 0, getstring('banana')),
         'iphistory':    (iphistory, 1, 0, getstring('iphistoryh')),
         'websearch':    (web, 0, 0, getstring('websearchh')),
         'server':       (server, 1, 0, getstring('serverh')),
