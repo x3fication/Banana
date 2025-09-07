@@ -40,13 +40,11 @@ def theme():
         with open('config.json', 'r', encoding='utf-8') as f:
             config = json.load(f)
     except Exception as e:
-        # logging.error(f"Failed to load config.json: {e}")
         return THEMES["banana"]
 
     theme_name = str(config['theme']).lower()
 
     if theme_name not in THEMES:
-        # logging.error(f"Theme '{theme_name}' not found. Falling back to default: 'banana'.")
         theme_name = "banana"
 
     return THEMES[theme_name]

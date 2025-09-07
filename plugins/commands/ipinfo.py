@@ -2,18 +2,28 @@ import requests
 import socket
 from plugins.common import *
 
+import requests
+import socket
+from plugins.common import *
+
 def ipinfo(server):
     try:
-        try: ip = socket.gethostbyname(server)
-        except socket.gaierror: ip = server
+        # resolve domain to ip
+        try:
+            ip = socket.gethostbyname(server)
+        except socket.gaierror:
+            ip = server 
 
+        # validate ip
         if not checkip(ip):
             logging.error('Please enter a valid IP address or domain.')
             return
 
+        # fetch ip info
         response = requests.get(f"http://ip-api.com/json/{ip}?fields=status,message,country,isp,org,proxy,mobile,hosting")
         data = response.json()
 
+        # check if request was good
         if data.get("status") != "success":
             logging.error(f"API error: {data.get('message')}")
             return

@@ -29,22 +29,19 @@ from plugins.commands.websearch import web
 from plugins.commands.pterodactyl import ptero
 from plugins.commands.iphistory import iphistory
 
-
 scripts = {}
 
-"""
-    if u want to add ur own commands do here is the format
-        (func, required_args, optional_args, usage)
-"""
-
+# repostuff gets stars, updated info, and version
 stars, updated, version = repostuff()
 clear = lambda: loadmenu(); print("\033c", end="")
 
+# clear and refresh the menu
 def flush():
     print("\033c", end="")
     loadmenu()
     stats(stars, updated, version)
 
+# define all commands
 def getcmds():
     return {
         'iphistory':    (iphistory, 1, 0, getstring('iphistoryh')),
@@ -77,10 +74,11 @@ def getcmds():
         'exit':         (exit, 0, 0, getstring('exith'))
     }
 
+# help command
 def chelp(command=None):
     commands = getcmds()
-
     if command is None:
+        # display list of all commands
         entries = []
         for cmd, entry in sorted(commands.items()):
             msg = entry[2] if len(entry) == 3 else entry[3]
@@ -101,17 +99,15 @@ def chelp(command=None):
             print(f"{gray}│ {yellow}{cmd.ljust(maxcmd)} {gray}│ {white}{desc.ljust(desclen)} {gray}│")
 
         print(f"{gray}└{'─' * (maxcmd + 2)}┴{'─' * (desclen + 2)}┘\n")
-
     elif command in commands:
         msg = commands[command][2] if len(commands[command]) == 3 else commands[command][3]
         print(msg)
-
     elif command in scripts:
         print(scripts[command]['usage'])
-
     else:
         print('Unknown command')
 
+# load custom scripts
 def loadscripts(folder='scripts'):
     if not os.path.exists(folder): return
     for filename in os.listdir(folder):
@@ -127,6 +123,7 @@ def loadscripts(folder='scripts'):
                 "usage": getattr(module, 'usage', ''),
             }
 
+# start node.js api
 def api():
     gg = os.path.join(os.getcwd(), "api")
     subprocess.run(fr'"C:\Program Files/nodejs/node.exe" server.mjs' if os.name == 'nt' else 'node server.mjs',
@@ -137,6 +134,7 @@ def api():
         shell=True
     )
 
+# execute a command
 def execmd(cmd):
     commands = getcmds()
     try:
@@ -146,6 +144,7 @@ def execmd(cmd):
         if command == "help":
             chelp(args[0] if args else None)
             return
+
         if command in commands:
             func, required_args, *rest = commands[command]
             optional_args = 0
@@ -160,6 +159,7 @@ def execmd(cmd):
             else:
                 print(usage)
             return
+
         if command in scripts:
             script = scripts[command]
             if len(args) == len(script["arguments"]):
@@ -167,19 +167,19 @@ def execmd(cmd):
             else:
                 print(script["usage"])
             return
+
         print('Unknown Command')
     except Exception as e:
         logging.error(e)
 
-
-    except Exception as e: logging.error(e)
-
+# main entry point
 if __name__ == '__main__':
     initialize()
     threading.Thread(target=api, daemon=True).start()
     loadscripts()
     stats(stars, updated, version)
 
+    # input loop
     while True:
         try:
             cmd = input(f'{underline}{yellow}banana{reset} > ')

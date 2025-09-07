@@ -3,13 +3,32 @@ from plugins.common import *
 import time
 
 def monitor(s):
-    if not checkserver(s): logging.error('Please input a real domain or server'); return
-    l=JavaServer.lookup(s);o=set()
+    # validate server
+    if not checkserver(s):
+        logging.error('Please input a real domain or server')
+        return
+
+    # lookup server
+    server = JavaServer.lookup(s)
+    old = set()
+
     while True:
         try:
-            n=set(l.query().players.names)
-            for p in n-o: print(f'{p} joined the server')
-            for p in o-n: print(f'{p} left the server')
-            o=n
-        except Exception as e: logging.error(e)
-        except KeyboardInterrupt: return
+            # get current online players
+            new = set(server.query().players.names)
+
+            # detect joins
+            for player in new - old:
+                print(f'{player} joined the server')
+
+            # detect leaves
+            for player in old - new:
+                print(f'{player} left the server')
+
+            # update previous players
+            old = new
+
+        except KeyboardInterrupt:
+            return
+        except Exception as e:
+            logging.error(e)

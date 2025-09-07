@@ -3,7 +3,7 @@ from plugins.common import *
 from fake_useragent import UserAgent
 import threading
 
-def fuzzit(url):
+def fuzzit(url, sem):
     try:
         ua = UserAgent()
         r = requests.get(f"http://{url}", timeout=5, headers={"User-Agent": ua.random})
@@ -11,25 +11,34 @@ def fuzzit(url):
             logging.success(f"{yellow}[{white}FOUND{yellow}]{white} {url} (200 OK)")
     except requests.RequestException:
         pass
+    finally:
+        sem.release()  # release the semaphore when thread finishes
 
-def fuzz(domain, file, mthreads):
+def fuzz(domain, file, max_threads):
     try:
-         if checkserver(domain) == False: logging.error('Please input a real domain'); return
-         mthreads = int(mthreads)
-         domain = str(domain).replace('https://', '').replace('http://', '')
-         with open(file, 'r') as f:
-             fuzzing = [line.strip() for line in f if line.strip()]
+        if not checkserver(domain):
+            logging.error("Please input a real domain")
+            return
 
-         threads = []
-         for sbsd in fuzzing:
-             url = domain.replace('FUZZ', sbsd)
-             while threading.active_count() > mthreads:
-                 pass
-             t = threading.Thread(target=fuzzit, args=(url,), daemon=True)
-             t.start()
-             threads.append(t)
+        domain = domain.replace("https://", "").replace("http://", "")
+        max_threads = int(max_threads)
 
-         for t in threads:
-             t.join()
+        sem = threading.Semaphore(max_threads)
 
-    except Exception as e: logging.error(e)
+        with open(file, "r", encoding="utf-8") as f:
+            fuzzing = [line.strip() for line in f if line.strip()]
+
+        threads = []
+
+        for entry in fuzzing:
+            url = domain.replace("FUZZ", entry)
+            sem.acquire()  # wait until there's room for a new thread
+            t = threading.Thread(target=fuzzit, args=(url, sem), daemon=True)
+            t.start()
+            threads.append(t)
+
+        for t in threads:
+            t.join()
+
+    except Exception as e:
+        logging.error(e)

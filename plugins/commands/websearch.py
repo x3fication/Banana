@@ -11,15 +11,18 @@ limit = threading.Semaphore(50)
 found = []
 lock = threading.Lock()
 
+# fetch the max page index from minecraftservers.org
 def getrange():
     r = requests.get('https://minecraftservers.org/').text
     return max([int(x) for x in re.findall(r'<a href="/index/(.*?)" class="button"', r)]) + 1
 
+# get server status info
 def serverdata(server):
     mcstat = mcstatus.JavaServer.lookup(server)
     status = mcstat.status()
     return status.players.online, status.players.max, round(status.latency), status.motd.to_plain(), status.version.name
 
+# check a server against filters and save it
 def checks(server, online_filter, maximum_ping, save, filename, version_filter):
     try:
         online, max_players, ping, motd, version = serverdata(server)
@@ -27,6 +30,7 @@ def checks(server, online_filter, maximum_ping, save, filename, version_filter):
             return
         if version_filter is not None and version != version_filter:
             return
+
         with lock:
             if server in found:
                 return
@@ -36,7 +40,6 @@ def checks(server, online_filter, maximum_ping, save, filename, version_filter):
         if save == 'y':
             clean_motd = motd.replace("\n", "").replace("\r", "")
             entry = f'({server})({online}/{max_players})({ping}ms)({clean_motd})({version})\n'
-
             with open(f'./output/{filename}', 'a+', encoding='UTF-8') as f:
                 f.seek(0)
                 if server not in f.read():
@@ -45,11 +48,13 @@ def checks(server, online_filter, maximum_ping, save, filename, version_filter):
     except Exception:
         pass
 
+# scrape a single page of minecraftservers.org and filter servers
 def scrape_page(page, online_filter, maximum_ping, save='y', filename='rizz.txt', version_filter=None, protected_filter='y'):
     try:
         listing = requests.get(f'https://minecraftservers.org/index/{page}').text
         servers = re.findall(r'<div class="url">(.*?)</div>', listing)
         threads = []
+
         for server in servers:
             try:
                 if protected_filter == 'y':
@@ -74,6 +79,7 @@ def scrape_page(page, online_filter, maximum_ping, save='y', filename='rizz.txt'
 
 def web():
     try:
+        # get filter input
         online_filter = int(input(f'{yellow}Minimum Online ({white}int{yellow})> {white}'))
         maximum_ping = int(input(f'{yellow}Maximum Ping ({white}int{yellow})> {white}'))
 
@@ -87,6 +93,7 @@ def web():
             logging.error(f"{red}Please enter a valid filename{white}")
             return
 
+        # travel scan option
         travel = input(f"{yellow}Travel ({white}y/n{yellow})> {white}")
         if travel not in ['y', 'n']:
             logging.error(f"{red}Please enter a valid value for travel{white}")
@@ -105,6 +112,7 @@ def web():
                 logging.error(f"{red}Start port has to be <= end port{white}")
                 return
 
+        # version filter
         dofilterver = input(f"{yellow}Filter Version ({white}y/n{yellow})> {white}")
         if dofilterver not in ['y', 'n']:
             logging.error(f"{red}Please enter a valid value for Filter Version{white}")
@@ -112,6 +120,7 @@ def web():
 
         version_filter = input(f"{yellow}Version? ({white}Ex: BungeeCord 1.8.x-1.21.x{yellow})> {white}") if dofilterver == 'y' else None
 
+        # start scraping pages
         maxpage = getrange()
         print(f"{gray}[{yellow}#{gray}] {white}Scraping thru {yellow}{maxpage} {white}indexes")
 
@@ -124,6 +133,7 @@ def web():
         for t in scrapingering:
             t.join()
 
+        # travel scan for open ports
         if travel == 'y':
             travellingering = []
             print()
