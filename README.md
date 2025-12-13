@@ -72,4 +72,5 @@ python main.py
 
 You are not allowed to sell banana or any modified versions. If you use any of my code please give me credit.
 
+![gg](https://api.lucabubi.me/chart?username=x3fication&repository=banana&color=yellow)
 ![Alt](https://repobeats.axiom.co/api/embed/7e4e4960a018472a371a835b4c2924118d6e3c1c.svg "Repobeats analytics image")
