@@ -27,7 +27,9 @@ from plugins.commands.edit import edit
 from plugins.commands.bungeeguard import bungee
 from plugins.commands.websearch import web
 from plugins.commands.pterodactyl import ptero
-from plugins.commands.iphistory import iphistory
+from plugins.commands.ping import ping
+from plugins.commands.analyze import analyze
+from plugins.commands.subnet import subnet
 
 scripts = {}
 
@@ -44,7 +46,9 @@ def flush():
 # define all commands
 def getcmds():
     return {
-        'iphistory':    (iphistory, 1, 0, getstring('iphistoryh')),
+        'subnet':       (subnet, 1, 0, getstring('subneth')),
+        'analyze':      (analyze, 1, 0, getstring('analyzeh')),
+        'ping':         (ping, 2, 0, getstring('pingh')),
         'websearch':    (web, 0, 0, getstring('websearchh')),
         'server':       (server, 1, 0, getstring('serverh')),
         'edit':         (edit, 1, 1, getstring('edith')),
@@ -132,7 +136,7 @@ def api():
         stderr=subprocess.DEVNULL,
         stdin=subprocess.DEVNULL,
         shell=True
-    )
+)
 
 # execute a command
 def execmd(cmd):

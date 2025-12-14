@@ -169,3 +169,4 @@ package.json
 proxies.txt
 config.json
 command.txt
+/output

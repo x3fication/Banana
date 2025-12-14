@@ -13,7 +13,7 @@ from datetime import datetime
 class logging:
     @staticmethod
     def format(symbol, color, message, end, flush=False):
-        print(f'{yellow}{white}{datetime.now().strftime("%H:%M")} {yellow}[ {color}{symbol} {yellow}] {message}', end=end, flush=flush)
+        print(f'{white}{datetime.now().strftime("%H:%M")} {gray}[ {color}{symbol} {gray}]{white} {message}', end=end, flush=flush)
 
     @staticmethod
     def error(message, end="\n", flush=False):
@@ -25,4 +25,4 @@ class logging:
 
     @staticmethod
     def success(message, end="\n", flush=False):
-        logging.format('+', green, message, end, flush)
+        logging.format('+', yellow, message, end, flush)
